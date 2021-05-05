@@ -26,10 +26,12 @@ void set_clients(server_t *s)
     s->list_clients->prev = NULL;
     for (int i = 0; i < 30; i++, s->list_clients = s->list_clients->next) {
         s->list_clients->fd = 0;
+        s->list_clients->log_status = NO;
         s->list_clients->next = malloc(sizeof(client_t));
         s->list_clients->next->next = NULL;
         s->list_clients->next->prev = s->list_clients;
     }
+    go_prev(s);
 }
 void init_server(server_t *s)
 {
@@ -41,7 +43,6 @@ void init_server(server_t *s)
     socklen_t ads = sizeof(adr);
 
     set_clients(s);
-    go_prev(s);
     while (1) {
         get_maxfd(s, &tmp, &read_fd, &write_fd);
         if (select(tmp + 1, &read_fd, &write_fd, NULL, 0x0) < 0)
@@ -49,8 +50,6 @@ void init_server(server_t *s)
         if (FD_ISSET(s->sockid, &read_fd)) {
             if ((nw_socket = accept(s->sockid, (struct sockaddr *)&adr, &ads)) < 0)
                 break;
-            printf("New Connection !\n");
-            dprintf(nw_socket, "200 Connecté\n");
             set_socketclient(s, &nw_socket);
         }
         handle_input(s, &read_fd, &write_fd);

@@ -22,13 +22,20 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <uuid/uuid.h>
+typedef enum logged
+{
+    YES = 1,
+    NO = 0
+} logged_t;
 
 typedef struct client_s client_t;
 typedef struct client_s
 {
     int fd;
-    char *uuid;
-    char *name;
+    char const *user_uuid;
+    char name[32];
+    logged_t log_status;
     client_t *next;
     client_t *prev;
 } client_t;

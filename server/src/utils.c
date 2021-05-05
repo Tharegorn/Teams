@@ -6,6 +6,13 @@
 */
 #include "server.h"
 
+void handle_commands(server_t *s, char *str)
+{
+    char **arr = str_warray(str, ' ');
+    if (strcmp(arr[0], "/help") == 0)
+        dprintf(s->list_clients->fd, "List commands\n");
+}
+
 void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd)
 {
     FD_ZERO(read_fd);
@@ -44,7 +51,7 @@ void handle_input(server_t *s, fd_set *read_fd, fd_set *write_fd)
                 FD_CLR(s->list_clients->fd, read_fd);
                 FD_CLR(s->list_clients->fd, write_fd);
             } else {
-                dprintf(s->list_clients->fd, "200 Reçu : %s\n", str);
+                handle_commands(s, str);
             }
         }
     }
