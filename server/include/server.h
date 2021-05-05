@@ -23,8 +23,6 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-struct pollfd *pfds;
-
 typedef struct client_s client_t;
 typedef struct client_s
 {
