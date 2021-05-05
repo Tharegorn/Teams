@@ -24,12 +24,15 @@
 #include <arpa/inet.h>
 
 struct pollfd *pfds;
+
+typedef struct client_s client_t;
 typedef struct client_s
 {
     int fd;
-    // char *name;
-    // char $uuid;
-    // struct sockaddr_in add;
+    char *uuid;
+    char *name;
+    client_t *next;
+    client_t *prev;
 } client_t;
 
 typedef struct server_s
@@ -42,8 +45,13 @@ typedef struct server_s
     int cli_max;
     struct pollfd *pfds;
     int clients[30];
+    client_t *list_clients;
 } server_t;
 
 char *get_next_line(int fd);
 char **str_warray(char const *str, char f);
+void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd);
+void go_prev(server_t *s);
+void set_socketclient(server_t *s, int *socket);
+void handle_input(server_t *s, fd_set *read_fd, fd_set *write_fd);
 #endif /* !SERVER_H_ */

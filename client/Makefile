@@ -41,11 +41,11 @@ all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	@$(CC) $(LDFLAGS) -o $(NAME) $(OBJ)
-	@echo -e "$(GREEN)=========( COMPLETED )=========$(END)"
+	@echo "$(GREEN)=========( COMPLETED )=========$(END)"
 
 test_run:	$(OBJ-CRIT)
 	@$(CC) $(CFLAGS) $(CRITFLAGS) $(OBJ-CRIT)
-	@echo -e "$(GREEN)=========( COMPLETED )=========$(END)"
+	@echo "$(GREEN)=========( COMPLETED )=========$(END)"
 	./a.out
 
 clean:
@@ -54,7 +54,7 @@ clean:
 	@$(RM) $(NAME)
 	@$(RM) $(OBJ-CRIT)
 	@$(RM) -r $(DIROBJ)
-	@echo -e "$(RED)=========( CLEANED )=========$(END)"
+	@echo "$(RED)=========( CLEANED )=========$(END)"
 
 fclean:	clean
 	@$(RM) -r $(DIROBJ)
@@ -65,17 +65,17 @@ re:	fclean all
 
 $(DIROBJ):
 	@mkdir -p $@ \
-	&& echo -e "$(GREEN)[OK]\t$(BLUE)Creating:$(WHITE)$(BOLD)" $(DIROBJ) "$(END)" \
-	|| echo -e "$(RED)[KO]\tCan't create:$(BOLD)" $(DIROBJ) "$(END)"
+	&& echo "$(GREEN)[OK]\t$(BLUE)Creating:$(WHITE)$(BOLD)" $(DIROBJ) "$(END)" \
+	|| echo "$(RED)[KO]\tCan't create:$(BOLD)" $(DIROBJ) "$(END)"
 
 $(DIROBJ)/%.o: lib/%$(EXTENSION) | $(DIROBJ)
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $< \
-	&& echo -e "$(GREEN)[OK]\t$(BLUE)Compiling:$(WHITE)$(BOLD)" $< "$(END)" \
-	|| echo -e "$(RED)[KO]\tCan't compile:$(BOLD)" $< "$(END)"
+	&& echo "$(GREEN)[OK]\t$(BLUE)Compiling:$(WHITE)$(BOLD)" $< "$(END)" \
+	|| echo "$(RED)[KO]\tCan't compile:$(BOLD)" $< "$(END)"
 
 $(DIROBJ)/%.o:	src/%$(EXTENSION) | $(DIROBJ)
 	@$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $< \
-	&& echo -e "$(GREEN)[OK]\t$(BLUE)Compiling:$(WHITE)$(BOLD)" $< "$(END)" \
-	|| echo -e "$(RED)[KO]\tCan't compile:$(BOLD)" $< "$(END)"
+	&& echo "$(GREEN)[OK]\t$(BLUE)Compiling:$(WHITE)$(BOLD)" $< "$(END)" \
+	|| echo "$(RED)[KO]\tCan't compile:$(BOLD)" $< "$(END)"
 
 .PHONY: all test_run clean fclean re

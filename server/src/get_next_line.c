@@ -8,65 +8,68 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <string.h>
+
+static int my_strclen(char *str)
+{
+    int i = 0;
+
+    for (; str[i]; i++);
+    return i;
+}
 
 static char *my_strncpy(char *res, char *str, int counter)
 {
-    int count = 0;
+    int i = 0;
 
-    while (str[count] != '\0' && count < counter) {
-        res[count] = str[count];
-        count++;
-    }
-    if (counter < count)
-        res[count] = '\0';
-    return (res);
+    for (; str[i] && i < counter; i++)
+        res[i] = str[i];
+    if (counter < i)
+        res[i] = '\0';
+    return res;
 }
 
-static char *add_line(char *l, int count, char *stock, int *n)
+static char *add_line(char *line, int i, char *stock, int *n)
 {
-    char *lengh;
+    char *tmp;
     int oldvalue;
 
-    if (l != 0)
-        oldvalue = strlen(l);
-    else
+    if (line == 0)
         oldvalue = 0;
-    lengh = malloc((oldvalue + count + 1) * sizeof(*lengh));
-    if (l != 0)
-        my_strncpy(lengh, l, oldvalue);
     else
-        my_strncpy(lengh, "", oldvalue);
-    lengh[oldvalue + count] = 0;
-    my_strncpy(lengh + oldvalue, stock + *n, count);
-    if (l)
-        free(l);
-    *n = *n + (count + 1);
-    return (lengh);
+        oldvalue = my_strclen(line);
+    tmp = malloc((oldvalue + i + 1) * sizeof(*tmp));
+    if (line != 0)
+        my_strncpy(tmp, line, oldvalue);
+    else
+        my_strncpy(tmp, "", oldvalue);
+    tmp[oldvalue + i] = 0;
+    my_strncpy(tmp + oldvalue, stock + *n, i);
+    if (line)
+        free(line);
+    *n = *n + (i + 1);
+    return tmp;
 }
 
-char *make(int fd, int rd)
+char *get_the_line(int fd, int rd)
 {
     char stock[rd];
     static int current_arg = 0;
     static int n;
-    int count = 0;
-    char *l = NULL;
+    char *line = NULL;
 
-    while (1 == 1) {
+    for (int i = 0; 1; i++) {
         if (current_arg <= n) {
             n = 0;
             if (!(current_arg = read(fd, stock, rd)))
-                return (l);
+                return (line);
             if (current_arg == -1)
                 return (NULL);
-            count = 0;
+            i = 0;
         }
-        if (stock[n + count] == '\n')
-            return (l = add_line(l, count, stock, &n));
-        if (n + count == current_arg - 1)
-            l = add_line(l, count + 1, stock, &n);
-        count++;
+        if (stock[n + i] == '\n')
+            return (line = add_line(line, i, stock, &n));
+        if ((n + i) == (current_arg - 1))
+            line = add_line(line, i + 1, stock, &n);
     }
 }
 
@@ -74,8 +77,10 @@ char *get_next_line(int fd)
 {
     int rd = 200;
 
-    if (rd >= 1000 || rd <= 0)
-        return (NULL);
+    if (rd >= 1000)
+        return NULL;
+    else if (rd <= 0)
+        return NULL;
     else
-        return (make(fd, rd));
+        return get_the_line(fd, rd);
 }
