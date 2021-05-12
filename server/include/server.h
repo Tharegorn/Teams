@@ -23,6 +23,10 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <uuid/uuid.h>
+#include <time.h>
+#include "logging_server.h"
+#include "logging_client.h"
+
 typedef enum logged
 {
     YES = 1,
@@ -33,8 +37,9 @@ typedef struct client_s client_t;
 typedef struct client_s
 {
     int fd;
-    char const *user_uuid;
-    char name[32];
+    char *user_uuid;
+    char *name;
+    int position;
     logged_t log_status;
     client_t *next;
     client_t *prev;
@@ -57,6 +62,15 @@ char *get_next_line(int fd);
 char **str_warray(char const *str, char f);
 void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd);
 void go_prev(server_t *s);
+void direct_message(server_t *s, char **arr);
 void set_socketclient(server_t *s, int *socket);
 void handle_input(server_t *s, fd_set *read_fd, fd_set *write_fd);
+void user_info(server_t *s, char **array);
+void logout(server_t *s);
+void load_users(void);
+void add_user(server_t *s, char **arr);
+char *gen_uuid(void);
+void info_free(FILE *fd, char *line, char **arr);
+client_t *create_client(int fd);
+void go_prev(server_t *s);
 #endif /* !SERVER_H_ */

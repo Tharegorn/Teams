@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-NAME		=	../myteams_client
+NAME		=	../myteams_cli
 
 LD			=	@ld
 CC			=	@gcc
@@ -21,7 +21,7 @@ OBJ-CRIT	=	$(SRC-CRIT:$(EXTENSION)=.o)
 
 CPPFLAGS	+=	-Wall -Wextra
 LDFLAGS		+=	-g3
-CFLAGS		+=	-Iinclude -fno-builtin -g3
+CFLAGS		+=	-I../libs/myteams -Iinclude -fno-builtin -g3
 CXXFLAGS	+=	-IInclude -fno-builtin
 CRITFLAGS	=	-lcriterion --coverage
 CGRAPHICS	=	-lcsfml-graphics -lcsfml-audio -lcsfml-window -lcsfml-system
@@ -40,7 +40,7 @@ WHITE		=	\033[37m
 all:	$(NAME)
 
 $(NAME):	$(OBJ)
-	@$(CC) $(LDFLAGS) -o $(NAME) $(OBJ)
+	$(CC) -o $(NAME) $(OBJ) -luuid $(CFLAGS) -L ../libs/myteams -lmyteams
 	@echo "$(GREEN)=========( COMPLETED )=========$(END)"
 
 test_run:	$(OBJ-CRIT)

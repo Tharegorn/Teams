@@ -7,21 +7,9 @@
 
 #include "server.h"
 
-client_t *create_client(int fd)
-{
-    client_t *client = malloc(sizeof(client_t));
-
-    client->fd = fd;
-    return client;
-}
-
-void go_prev(server_t *s)
-{
-    for (; s->list_clients->prev != NULL; s->list_clients = s->list_clients->prev);
-}
-
 void set_clients(server_t *s)
 {
+    load_users();
     s->list_clients = malloc(sizeof(client_t));
     s->list_clients->prev = NULL;
     for (int i = 0; i < 30; i++, s->list_clients = s->list_clients->next) {
@@ -30,6 +18,7 @@ void set_clients(server_t *s)
         s->list_clients->next = malloc(sizeof(client_t));
         s->list_clients->next->next = NULL;
         s->list_clients->next->prev = s->list_clients;
+        s->list_clients->position = i;
     }
     go_prev(s);
 }
@@ -48,7 +37,8 @@ void init_server(server_t *s)
         if (select(tmp + 1, &read_fd, &write_fd, NULL, 0x0) < 0)
             break;
         if (FD_ISSET(s->sockid, &read_fd)) {
-            if ((nw_socket = accept(s->sockid, (struct sockaddr *)&adr, &ads)) < 0)
+            if ((nw_socket = accept(s->sockid,\
+             (struct sockaddr *)&adr, &ads)) < 0)
                 break;
             set_socketclient(s, &nw_socket);
         }
@@ -100,4 +90,5 @@ int main(int ac, char **av)
     if (serv_handling(s) == 84)
         return 84;
     init_server(s);
+    return 0;
 }
