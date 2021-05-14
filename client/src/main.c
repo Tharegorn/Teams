@@ -7,7 +7,7 @@
 
 #include "client.h"
 
-char *message_convert(char **str)
+char *message_convert(char **str, int start)
 {
     char *tmp = NULL;
     int size = 0;
@@ -15,11 +15,11 @@ char *message_convert(char **str)
 
     if (str[3] == NULL)
         return str[2];
-    for (int i = 2; str[i]; i++, words++)
+    for (int i = start; str[i]; i++, words++)
         size += strlen(str[i]);
     tmp = malloc(sizeof (char) * (size + words + 1));
     tmp[0] = '\0';
-    for (int i = 2; str[i]; i++) {
+    for (int i = start; str[i]; i++) {
         tmp = strcat(tmp, str[i]);
         tmp = strcat(tmp, " ");
     }
@@ -34,7 +34,7 @@ void receive(client_t *cli)
     char buffer[5024];
     int len = 0;
 
-    if ((len = recv(cli->sockid, buffer, 1024 - 1, 0)) < 0)
+    if ((len = recv(cli->sockid, buffer, 5024 - 1, 0)) < 0)
         return;
     buffer[len] = 0;
     arr = str_warray(buffer, ' ');
@@ -54,10 +54,18 @@ void receive(client_t *cli)
         if (strcmp(arr[1], "NULL") == 0)
             client_error_unknown_user(arr[2]);
         else {
-            client_private_message_print_messages(arr[1], time(NULL), message_convert(arr));
+            client_event_private_message_received(arr[1], message_convert(arr, 2));
         }
     }
-
+    if (strcmp(arr[0], "MSG") == 0) {
+        if (strcmp(arr[1], "NULL") == 0)
+            client_error_unknown_user(arr[2]);
+        else if (strcmp(arr[1], "ANY") == 0)
+            printf("No pm with this User\n");
+        else {
+            client_private_message_print_messages(arr[1], (time_t)atoi(arr[2]), message_convert(arr, 3));
+        }
+    }
 }
 
 void send_to_server(client_t *cli, char *line)
@@ -108,6 +116,12 @@ void send_to_server(client_t *cli, char *line)
             dprintf(cli->sockid, "\n");
         }
     }
+    if (strcmp(arr[0], "/messages") == 0) {
+        if (arr[1] == NULL || cli->log_status == NO)
+            client_error_unauthorized();
+        else
+            dprintf(cli->sockid, "MSG %s\n", arr[1]);
+     }
 }
 
 void loop(client_t *cli)
