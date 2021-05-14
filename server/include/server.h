@@ -74,4 +74,5 @@ void info_free(FILE *fd, char *line, char **arr);
 client_t *create_client(int fd);
 void go_prev(server_t *s);
 void retreive_message(server_t *s, char *uuid);
+void users(server_t *s);
 #endif /* !SERVER_H_ */

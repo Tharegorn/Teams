@@ -66,6 +66,8 @@ void receive(client_t *cli)
             client_private_message_print_messages(arr[1], (time_t)atoi(arr[2]), message_convert(arr, 3));
         }
     }
+    if (strcmp(arr[0], "USERS") == 0)
+        client_print_user(arr[2], arr[1], atoi(arr[3]));
 }
 
 void send_to_server(client_t *cli, char *line)
@@ -121,7 +123,13 @@ void send_to_server(client_t *cli, char *line)
             client_error_unauthorized();
         else
             dprintf(cli->sockid, "MSG %s\n", arr[1]);
-     }
+    }
+    if (strcmp(arr[0], "/users") == 0) {
+        if (cli->log_status == NO)
+            client_error_unauthorized();
+        else
+            dprintf(cli->sockid, "USERS\n");
+    }
 }
 
 void loop(client_t *cli)
