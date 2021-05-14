@@ -73,4 +73,5 @@ char *gen_uuid(void);
 void info_free(FILE *fd, char *line, char **arr);
 client_t *create_client(int fd);
 void go_prev(server_t *s);
+void retreive_message(server_t *s, char *uuid);
 #endif /* !SERVER_H_ */

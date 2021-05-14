@@ -33,6 +33,8 @@ void handle_commands(server_t *s, char *str)
         user_info(s, arr);
     if (strcmp(arr[0], "PM") == 0)
         direct_message(s, arr);
+    if (strcmp(arr[0], "MSG") == 0)
+        retreive_message(s, arr[1]);
 }
 
 void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd)

@@ -7,14 +7,35 @@
 
 #include "server.h"
 
+void save_message(char **arr, char *sender_uuid)
+{
+    FILE *fd;
+    char file[5000];
+
+    strcpy(file, "./server/logs/PM/");
+    strcat(file, arr[1]);
+    strcat(file, ".log");
+    if(access(file, F_OK ) != 0 )
+        fd = fopen(file, "w");
+    else
+        fd = fopen(file, "a");
+    fprintf(fd, "%s %ld ",sender_uuid, time(NULL));
+    for (int i = 2; arr[i]; i++)
+        fprintf(fd, "%s ",arr[i]);
+    fputs("\n", fd);
+    fclose(fd);
+}
+
 void send_message(server_t *s, char **arr)
 {
     int stk = s->list_clients->position;
     char *name = strdup(s->list_clients->user_uuid);
 
     go_prev(s);
-    for (; s->list_clients->next != NULL; s->list_clients = s->list_clients->next) {
+    for (; s->list_clients->next != NULL;\
+     s->list_clients = s->list_clients->next) {
         if (strcmp(s->list_clients->user_uuid, arr[1]) == 0) {
+            save_message(arr, name);
             dprintf(s->list_clients->fd, "PM %s ", name);
             for (int i = 2; arr[i]; i++)
                 dprintf(s->list_clients->fd, "%s ", arr[i]);
