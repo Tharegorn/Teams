@@ -7,6 +7,13 @@
 
 #include "server.h"
 
+int run = 1;
+
+void sig_handler(int signal)
+{
+    run = 0;
+}
+
 void set_clients(server_t *s)
 {
     load_users();
@@ -32,7 +39,8 @@ void init_server(server_t *s)
     socklen_t ads = sizeof(adr);
 
     set_clients(s);
-    while (1) {
+    signal(SIGINT, sig_handler);
+    while (run == 1) {
         get_maxfd(s, &tmp, &read_fd, &write_fd);
         if (select(tmp + 1, &read_fd, &write_fd, NULL, 0x0) < 0)
             break;
@@ -43,6 +51,14 @@ void init_server(server_t *s)
             set_socketclient(s, &nw_socket);
         }
         handle_input(s, &read_fd, &write_fd);
+    }
+    go_prev(s);
+    for (; s->list_clients->next != NULL; s->list_clients = s->list_clients->next) {
+        if (s->list_clients->fd != 0) {
+            if (s->list_clients->log_status == YES)
+                server_event_user_logged_out(s->list_clients->user_uuid);
+            dprintf(s->list_clients->fd, "LOGOUT\n");
+        }
     }
 }
 

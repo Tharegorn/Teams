@@ -68,6 +68,11 @@ void receive(client_t *cli)
     }
     if (strcmp(arr[0], "USERS") == 0)
         client_print_user(arr[2], arr[1], atoi(arr[3]));
+    if (strcmp(arr[0], "LOGOUT") == 0) {
+        if (cli->log_status == YES)
+            client_event_logged_out(cli->user_uuid, cli->name);
+        exit(0);
+    }
 }
 
 void send_to_server(client_t *cli, char *line)
@@ -147,10 +152,6 @@ void loop(client_t *cli)
             receive(cli);
         }
     }
-    if (cli->log_status == YES)
-        client_event_logged_out(cli->user_uuid, cli->name);
-    dprintf(cli->sockid, "LOGOUT\n");
-    exit(0);
 }
 
 int main(int ac, char **av)

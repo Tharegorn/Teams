@@ -73,7 +73,7 @@ void retreive(server_t *s, char *uuid)
     free_all(any, line, fd, a);
 }
 
-void retreive_message(server_t *s, char *uuid)
+void retreive_message(server_t *s, char **arr)
 {
     char *line = NULL;
     char **a = NULL;
@@ -83,14 +83,14 @@ void retreive_message(server_t *s, char *uuid)
 
     while (getline(&line, &size, fd) != -1) {
         a = str_warray(line, ' ');
-        if (strcmp(uuid, a[1]) == 0) {
-            retreive(s, uuid);
+        if (strcmp(arr[1], a[1]) == 0) {
+            retreive(s, arr[1]);
             exists = 1;
             break;
         }
     }
     if (exists == 0)
-        dprintf(s->list_clients->fd, "MSG NULL %s\n", uuid);
+        dprintf(s->list_clients->fd, "MSG NULL %s\n", arr[1]);
     free(line);
     fclose(fd);
 }

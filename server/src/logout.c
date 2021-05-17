@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-void logout(server_t *s)
+void logout(server_t *s, __attribute__((unused))char **arr)
 {
     if (s->list_clients->log_status == NO)
         return;

@@ -7,6 +7,27 @@
 
 #include "server.h"
 
+char *message_convert(char **str, int start)
+{
+    char *tmp = NULL;
+    int size = 0;
+    int words = 0;
+
+    if (str[3] == NULL)
+        return str[2];
+    for (int i = start; str[i]; i++, words++)
+        size += strlen(str[i]);
+    tmp = malloc(sizeof (char) * (size + words + 1));
+    tmp[0] = '\0';
+    for (int i = start; str[i]; i++) {
+        tmp = strcat(tmp, str[i]);
+        tmp = strcat(tmp, " ");
+    }
+    tmp[size + words] = '\0';
+    tmp = strdup(tmp);
+    return tmp;
+}
+
 void save_message(char **arr, char *sender_uuid)
 {
     FILE *fd;
@@ -36,10 +57,7 @@ void send_message(server_t *s, char **arr)
      s->list_clients = s->list_clients->next) {
         if (strcmp(s->list_clients->user_uuid, arr[1]) == 0) {
             save_message(arr, name);
-            dprintf(s->list_clients->fd, "PM %s ", name);
-            for (int i = 2; arr[i]; i++)
-                dprintf(s->list_clients->fd, "%s ", arr[i]);
-            dprintf(s->list_clients->fd, "\n");
+            dprintf(s->list_clients->fd, "PM %s %s\n", name, message_convert(arr, 2));
         }
     }
     go_prev(s);

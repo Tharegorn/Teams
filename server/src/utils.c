@@ -7,6 +7,8 @@
 #include "server.h"
 #include <uuid/uuid.h>
 
+static commands list_commands[6] = {&add_user, &logout, &user_info, &direct_message, &retreive_message, &users};
+
 char *gen_uuid(void)
 {
     uuid_t new_uuid;
@@ -20,23 +22,18 @@ char *gen_uuid(void)
 void handle_commands(server_t *s, char *str)
 {
     char **arr = str_warray(str, ' ');
-
+    char *instruction[] = {"LOGIN", "LOOGUT", "USER", "PM", "MSG",
+                             "USERS", NULL};
     if (arr[0] == NULL)
         return;
-    if (strcmp(arr[0], "HELP") == 0)
-        dprintf(s->list_clients->fd, "List commands");
-    if (strcmp(arr[0], "LOGIN") == 0)
-        add_user(s, arr);
-    if (strcmp(arr[0], "LOGOUT") == 0)
-        logout(s);
-    if (strcmp(arr[0], "USER") == 0)
-        user_info(s, arr);
-    if (strcmp(arr[0], "PM") == 0)
-        direct_message(s, arr);
-    if (strcmp(arr[0], "MSG") == 0)
-        retreive_message(s, arr[1]);
-    if (strcmp(arr[0], "USERS") == 0)
-        users(s);
+    // if (strcmp(arr[0], "HELP") == 0)
+    //     dprintf(s->list_clients->fd, "List commands");
+    for (int i = 0; instruction[i]; i++) {
+        if (strcmp(arr[0], instruction[i]) == 0) {
+            list_commands[i](s, arr);
+            break;
+        }
+    }
 }
 
 void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd)
@@ -45,8 +42,9 @@ void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd)
     FD_ZERO(write_fd);
     FD_SET(s->sockid, read_fd);
     FD_SET(s->sockid, write_fd);
-    for (; s->list_clients->next != NULL;\
-     s->list_clients = s->list_clients->next) {
+    for (; s->list_clients->next != NULL;
+         s->list_clients = s->list_clients->next)
+    {
         if (s->list_clients->fd > 0)
             FD_SET(s->list_clients->fd, read_fd);
         if (s->list_clients->fd > *tmp)
@@ -57,9 +55,11 @@ void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd)
 
 void set_socketclient(server_t *s, int *socket)
 {
-    for (; s->list_clients->next != NULL;\
-    s->list_clients = s->list_clients->next) {
-        if (s->list_clients->fd == 0) {
+    for (; s->list_clients->next != NULL;
+         s->list_clients = s->list_clients->next)
+    {
+        if (s->list_clients->fd == 0)
+        {
             s->list_clients->fd = *socket;
             break;
         }
@@ -71,15 +71,20 @@ void handle_input(server_t *s, fd_set *read_fd, fd_set *write_fd)
 {
     char *str = NULL;
 
-    for (; s->list_clients->next != NULL;\
-     s->list_clients = s->list_clients->next) {
-        if (FD_ISSET(s->list_clients->fd, read_fd)) {
-            if ((str = get_next_line(s->list_clients->fd)) == NULL) {
+    for (; s->list_clients->next != NULL;
+         s->list_clients = s->list_clients->next)
+    {
+        if (FD_ISSET(s->list_clients->fd, read_fd))
+        {
+            if ((str = get_next_line(s->list_clients->fd)) == NULL)
+            {
                 close(s->list_clients->fd);
                 s->list_clients->fd = 0;
                 FD_CLR(s->list_clients->fd, read_fd);
                 FD_CLR(s->list_clients->fd, write_fd);
-            } else {
+            }
+            else
+            {
                 handle_commands(s, str);
             }
         }

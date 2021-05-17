@@ -30,7 +30,7 @@ int is_online(server_t *s, char *uuid)
     return 1;
 }
 
-void users(server_t *s)
+void users(server_t *s, __attribute__((unused))char **array)
 {
     FILE *fd = fopen("./server/logs/user_uuid.log", "r+");
     char *line;

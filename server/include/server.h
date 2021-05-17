@@ -24,6 +24,8 @@
 #include <arpa/inet.h>
 #include <uuid/uuid.h>
 #include <time.h>
+#include <signal.h>
+
 #include "logging_server.h"
 #include "logging_client.h"
 
@@ -66,13 +68,15 @@ void direct_message(server_t *s, char **arr);
 void set_socketclient(server_t *s, int *socket);
 void handle_input(server_t *s, fd_set *read_fd, fd_set *write_fd);
 void user_info(server_t *s, char **array);
-void logout(server_t *s);
+void logout(server_t *s, char **arr);
 void load_users(void);
 void add_user(server_t *s, char **arr);
 char *gen_uuid(void);
 void info_free(FILE *fd, char *line, char **arr);
 client_t *create_client(int fd);
 void go_prev(server_t *s);
-void retreive_message(server_t *s, char *uuid);
-void users(server_t *s);
+void retreive_message(server_t *s, char **arr);
+void users(server_t *s, char **arr);
+
+typedef void(*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */
