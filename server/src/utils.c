@@ -42,8 +42,7 @@ void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd)
     FD_SET(s->sockid, read_fd);
     FD_SET(s->sockid, write_fd);
     for (; s->list_clients->next != NULL;
-         s->list_clients = s->list_clients->next)
-    {
+         s->list_clients = s->list_clients->next) {
         if (s->list_clients->fd > 0)
             FD_SET(s->list_clients->fd, read_fd);
         if (s->list_clients->fd > *tmp)
@@ -55,10 +54,8 @@ void get_maxfd(server_t *s, int *tmp, fd_set *read_fd, fd_set *write_fd)
 void set_socketclient(server_t *s, int *socket)
 {
     for (; s->list_clients->next != NULL;
-         s->list_clients = s->list_clients->next)
-    {
-        if (s->list_clients->fd == 0)
-        {
+         s->list_clients = s->list_clients->next) {
+        if (s->list_clients->fd == 0) {
             s->list_clients->fd = *socket;
             break;
         }
@@ -71,21 +68,16 @@ void handle_input(server_t *s, fd_set *read_fd, fd_set *write_fd)
     char *str = NULL;
 
     for (; s->list_clients->next != NULL;
-         s->list_clients = s->list_clients->next)
-    {
-        if (FD_ISSET(s->list_clients->fd, read_fd))
-        {
-            if ((str = get_next_line(s->list_clients->fd)) == NULL)
-            {
+         s->list_clients = s->list_clients->next) {
+        if (FD_ISSET(s->list_clients->fd, read_fd)) {
+            if ((str = get_next_line(s->list_clients->fd)) == NULL) {
                 close(s->list_clients->fd);
                 s->list_clients->fd = 0;
                 FD_CLR(s->list_clients->fd, read_fd);
                 FD_CLR(s->list_clients->fd, write_fd);
             }
             else
-            {
                 handle_commands(s, str);
-            }
         }
     }
     go_prev(s);

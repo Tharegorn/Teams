@@ -11,27 +11,11 @@ static commands rec[] = {&rec_login, &rec_logout, &rec_user,\
  &rec_users, &rec_send, &rec_msg};
 static commands to_server[] = {&send_login, &send_logout,\
  &send_user, &send_users, &send_send, &send_msg};
+int run = 1;
 
-char *message_convert(char **str, int start)
+void handle_signal(__attribute__((unused)) int signal)
 {
-    char *tmp = NULL;
-    int size = 0;
-    int words = 0;
-
-    if (str[3] == NULL)
-        return str[2];
-    for (int i = start; str[i]; i++, words++)
-        size += strlen(str[i]);
-    tmp = malloc(sizeof(char) * (size + words + 1));
-    tmp[0] = '\0';
-    for (int i = start; str[i]; i++)
-    {
-        tmp = strcat(tmp, str[i]);
-        tmp = strcat(tmp, " ");
-    }
-    tmp[size + words] = '\0';
-    tmp = strdup(tmp);
-    return tmp;
+    run = 0;
 }
 
 void receive(client_t *cli)
@@ -72,22 +56,23 @@ void send_to_server(client_t *cli, char *line)
 void loop(client_t *cli)
 {
     fd_set rfd;
-    while (1)
-    {
+
+    signal(SIGINT, handle_signal);
+    while (run == 1) {
         FD_ZERO(&rfd);
         FD_SET(STDIN_FILENO, &rfd);
         FD_SET(cli->sockid, &rfd);
         if (select(cli->sockid + 1, &rfd, NULL, NULL, NULL) < 0)
             break;
         if (FD_ISSET(STDIN_FILENO, &rfd))
-        {
             send_to_server(cli, get_next_line(0));
-        }
         else if (FD_ISSET(cli->sockid, &rfd))
-        {
             receive(cli);
-        }
     }
+    if (cli->log_status == YES)
+        client_event_logged_out(cli->user_uuid, cli->name);
+    dprintf(cli->sockid, "LOGOUT\n");
+    exit(0);
 }
 
 int main(int ac, char **av)

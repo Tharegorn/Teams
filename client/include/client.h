@@ -23,6 +23,8 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <uuid/uuid.h>
+#include <signal.h>
+
 #include "logging_server.h"
 #include "logging_client.h"
 
