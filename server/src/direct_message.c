@@ -57,7 +57,8 @@ void send_message(server_t *s, char **arr)
      s->list_clients = s->list_clients->next) {
         if (strcmp(s->list_clients->user_uuid, arr[1]) == 0) {
             save_message(arr, name);
-            dprintf(s->list_clients->fd, "PM %s %s\n", name, message_convert(arr, 2));
+            dprintf(s->list_clients->fd, "PM %s %s\n",\
+             name, message_convert(arr, 2));
         }
     }
     go_prev(s);

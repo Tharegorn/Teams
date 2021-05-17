@@ -3,3 +3,4 @@ objets/
 .vscode/
 myteams_*
 a.out
+*.log

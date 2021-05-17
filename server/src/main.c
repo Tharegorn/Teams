@@ -53,7 +53,8 @@ void init_server(server_t *s)
         handle_input(s, &read_fd, &write_fd);
     }
     go_prev(s);
-    for (; s->list_clients->next != NULL; s->list_clients = s->list_clients->next) {
+    for (; s->list_clients->next != NULL;\
+     s->list_clients = s->list_clients->next) {
         if (s->list_clients->fd != 0) {
             if (s->list_clients->log_status == YES)
                 server_event_user_logged_out(s->list_clients->user_uuid);
