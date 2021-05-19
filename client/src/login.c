@@ -17,6 +17,8 @@ void rec_login(client_t *cli, char **arr)
 
 void send_login(client_t *cli, char **arr)
 {
+    char c = 34;
+
     if (cli->log_status == YES)
         client_error_already_exist();
     else
@@ -24,6 +26,6 @@ void send_login(client_t *cli, char **arr)
         if (arr[1] == NULL)
             client_error_unauthorized();
         else
-            dprintf(cli->sockid, "LOGIN %s\n", arr[1]);
+            dprintf(cli->sockid, "LOGIN %c%s%c\n", c, arr[1], c);
     }
 }

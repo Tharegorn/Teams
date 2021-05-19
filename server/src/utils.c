@@ -7,8 +7,8 @@
 #include "server.h"
 #include <uuid/uuid.h>
 
-static commands list_commands[6] = {&add_user, &logout, &user_info,\
- &direct_message, &retreive_message, &users};
+static commands list_commands[] = {&add_user, &logout, &user_info,\
+ &direct_message, &retreive_message, &users, &create};
 
 char *gen_uuid(void)
 {
@@ -24,7 +24,7 @@ void handle_commands(server_t *s, char *str)
 {
     char **arr = str_warray(str, ' ');
     char *instruction[] = {"LOGIN", "LOGOUT", "USER", "PM", "MSG",
-                             "USERS", NULL};
+                             "USERS", "CREATE", NULL};
     if (arr[0] == NULL)
         return;
     for (int i = 0; instruction[i]; i++) {

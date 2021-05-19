@@ -15,6 +15,7 @@ void load_users(void)
     FILE *fd = fopen("./server/logs/user_uuid.log", "r");
 
     while (getline(&line, &size, fd) != -1) {
+        // line[strlen(line) - 1] = '\0';
         arr = str_warray(line, ' ');
         server_event_user_loaded(arr[1], arr[0]);
     }

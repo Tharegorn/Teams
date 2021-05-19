@@ -17,4 +17,5 @@ void logout(server_t *s, __attribute__((unused))char **arr)
     free(s->list_clients->name);
     free(s->list_clients->user_uuid);
     s->list_clients->log_status = NO;
+    s->list_clients->contex = ANY;
 }

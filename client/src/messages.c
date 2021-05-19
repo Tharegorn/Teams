@@ -15,7 +15,7 @@ void rec_msg(__attribute__((unused)) client_t *cli, char **arr)
         printf("No pm with this User\n");
     else
         client_private_message_print_messages(arr[1], (time_t)atoi(arr[2]),\
-         message_convert(arr, 3));
+         arr[3]);
 }
 
 void send_msg(client_t *cli, char **arr)

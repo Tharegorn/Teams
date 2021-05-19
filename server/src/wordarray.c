@@ -5,55 +5,87 @@
 ** wordarray
 */
 
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
 
-int clean_str(char c, char f)
-{
-    if (c >= f + 1)
-        return 1;
-    else
-        return 0;
-}
+int pos;
 
 int nb_word(char const *str, char f)
 {
-    int i = 0;
-    int words = 0;
+    int word = 1;
+    bool in_word = false;
 
-    while (str[i] != '\0') {
-        if (clean_str(str[i], f) == 1)
-            words++;
-        for (; clean_str(str[i], f) == 1 && str[i] != '\0'; i++);
-        if (str[i] != '\0')
+    if (strlen(str) == 0)
+        return 0;
+    for (int i = 0; str[i]; i++) {
+        if (str[i] == 34 && in_word == false) {
+            in_word = true;
             i++;
+        }
+        for (; in_word == true && str[i]; i++) {
+            if (str[i] == 34)
+                in_word = false;
+        }
+        if (str[i] == f)
+            word++;
     }
-    return words;
+    return word;
 }
 
-int len_word(char const *str, int j, char f)
+int len_word(char const *str, char f)
 {
+    bool quote = false;
     int len = 0;
 
-    for (; clean_str(str[j], f) == 1; j++, len++);
+    for (; str[pos] && (str[pos] != f ||
+    (str[pos] == f && quote == true)); pos++, len++) {
+        if (str[pos] == 34) {
+            if (quote == true)
+                quote = false;
+            else if (quote == false)
+                quote = true;
+        }
+    }
+    pos++;
     return len;
+}
+
+char *get_chrs(const char *str, int start, int end)
+{
+    char *tmp = malloc(sizeof(char) * (end - start) + 1);
+    int j = 0;
+
+    for (int i = start; i != end; i++) {
+        if (str[i] != 34) {
+            tmp[j] = str[i];
+            j++;
+        }
+    }
+    tmp[j] = '\0';
+    return tmp;
 }
 
 char **str_warray(char const *str, char f)
 {
-    char **array = malloc(sizeof(char *) * (nb_word(str, f) + 1));
-    int i = 0;
-    int j = 0;
-    int k = 0;
+    char **array = NULL;
+    int words = nb_word(str, f);
+    int len;
+    int position = 0;
 
-    for (; i != nb_word(str, f); i++) {
-        k = 0;
-        for (; clean_str(str[j], f) == 0; j++);
-        array[i] = malloc(sizeof(char) * (len_word(str, j, f) + 1));
-        for (; clean_str(str[j], f) == 1; k++, j++)
-            array[i][k] = str[j];
-        array[i][k] = '\0';
+    if (strlen(str) == 0)
+        return NULL;
+    pos = 0;
+    array = malloc(sizeof (char *) * (words + 1));
+    for (int i = 0, j = 0; i < words; i++, j++) {
+        len = len_word(str, f);
+        array[i] =  get_chrs(str, position, position + len);
+        position += len + 1;
     }
-    array[i] = NULL;
+    if (array[words - 1][strlen(array[words - 1]) - 1] == '\n')
+        array[words - 1][strlen(array[words - 1]) - 1] = '\0';
+    array[words] = NULL;
     return array;
 }

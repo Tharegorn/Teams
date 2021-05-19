@@ -40,10 +40,7 @@ void save_message(char **arr, char *sender_uuid)
         fd = fopen(file, "w");
     else
         fd = fopen(file, "a");
-    fprintf(fd, "%s %ld ",sender_uuid, time(NULL));
-    for (int i = 2; arr[i]; i++)
-        fprintf(fd, "%s ",arr[i]);
-    fputs("\n", fd);
+    fprintf(fd, "\"%s\" \"%ld\" \"%s\"\n",sender_uuid, time(NULL), arr[2]);
     fclose(fd);
 }
 
@@ -57,8 +54,8 @@ void send_message(server_t *s, char **arr)
      s->list_clients = s->list_clients->next) {
         if (strcmp(s->list_clients->user_uuid, arr[1]) == 0) {
             save_message(arr, name);
-            dprintf(s->list_clients->fd, "PM %s %s\n",\
-             name, message_convert(arr, 2));
+            dprintf(s->list_clients->fd, "PM \"%s\" \"%s\"\n",\
+             name, arr[2]);
         }
     }
     go_prev(s);
@@ -78,7 +75,6 @@ void direct_message(server_t *s, char **arr)
     size_t size = 0;
     FILE *fd;
     int exists = 0;
-
     if (arr[1] == NULL || arr[2] == NULL)
         return;
     fd = fopen("./server/logs/user_uuid.log", "r");

@@ -65,7 +65,8 @@ void retreive(server_t *s, char *uuid)
     while(getline(&line, &size, fd) != -1) {
         a = str_warray(line, ' ');
         if (strcmp(a[0], uuid) == 0) {
-            dprintf(s->list_clients->fd, "MSG %s %s %s\n", a[0], a[1], c(a, 2));
+            dprintf(s->list_clients->fd, "MSG \"%s\" \"%s\" \"%s\"\n",\
+             a[0], a[1], a[2]);
             usleep(0.1);
             any = 1;
         }

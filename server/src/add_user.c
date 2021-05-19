@@ -17,10 +17,8 @@ void add_user_two(server_t *s, char **arr, char **array, int res)
     } else {
         s->list_clients->name = strdup(arr[1]);
         s->list_clients->user_uuid = strdup(gen_uuid());
-        fputs(s->list_clients->name, fd);
-        fputs(" ", fd);
-        fputs(s->list_clients->user_uuid, fd);
-        fputs("\n", fd);
+        fprintf(fd, "\"%s\" \"%s\"\n", s->list_clients->name,\
+         s->list_clients->user_uuid);
         server_event_user_created(s->list_clients->user_uuid,\
          s->list_clients->name);
     }
@@ -45,7 +43,7 @@ void add_user(server_t *s, char **arr)
     add_user_two(s, arr, array, res);
     server_event_user_logged_in(s->list_clients->user_uuid);
     s->list_clients->log_status = YES;
-    dprintf(s->list_clients->fd, "LOGIN %s %s",\
+    dprintf(s->list_clients->fd, "LOGIN \"%s\" \"%s\"\n",\
     s->list_clients->user_uuid, s->list_clients->name);
     info_free(fd, line, arr);
 }

@@ -45,6 +45,7 @@ typedef struct client_s
 char *get_next_line(int fd);
 char **str_warray(char const *str, char f);
 char *message_convert(char **str, int start);
+int count_parser(char *str);
 
 void rec_login(client_t *cli, char **arr);
 void send_login(client_t *cli, char **arr);
@@ -63,6 +64,9 @@ void send_user(client_t *cli, char **arr);
 
 void rec_users(client_t *cli, char **arr);
 void send_users(client_t *cli, char **arr);
+
+void rec_create(client_t *cli, char **arr);
+void send_create(client_t *cli, char **arr);
 
 typedef void(*commands)(client_t *cli, char **command);
 #endif /* !CLIENT_H_ */

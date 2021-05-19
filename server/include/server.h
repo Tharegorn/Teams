@@ -52,6 +52,7 @@ typedef struct client_s
     char *user_uuid;
     char *name;
     int position;
+    context_t contex;
     logged_t log_status;
     client_t *next;
     client_t *prev;
@@ -88,6 +89,7 @@ void go_prev(server_t *s);
 void retreive_message(server_t *s, char **arr);
 void users(server_t *s, char **arr);
 void set_clients(server_t *s);
-
+char *c(char **str, int start);
+void create(server_t *s, char **arr);
 typedef void(*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */

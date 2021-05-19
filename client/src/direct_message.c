@@ -22,10 +22,5 @@ void send_send(client_t *cli, char **arr)
     else if (arr[1] == NULL || arr[2] == NULL)
         printf("Invalid Command : /send <user_uuid> <message_body>\n");
     else
-    {
-        dprintf(cli->sockid, "PM %s ", arr[1]);
-        for (int i = 2; arr[i]; i++)
-            dprintf(cli->sockid, "%s ", arr[i]);
-        dprintf(cli->sockid, "\n");
-    }
+        dprintf(cli->sockid, "PM \"%s\" \"%s\"\n", arr[1], arr[2]);
 }

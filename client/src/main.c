@@ -8,9 +8,9 @@
 #include "client.h"
 
 static commands rec[] = {&rec_login, &rec_logout, &rec_user,\
- &rec_users, &rec_send, &rec_msg};
+ &rec_users, &rec_send, &rec_msg, &rec_create};
 static commands to_server[] = {&send_login, &send_logout,\
- &send_user, &send_users, &send_send, &send_msg};
+ &send_user, &send_users, &send_send, &send_msg, &send_create};
 int run = 1;
 
 void handle_signal(__attribute__((unused)) int signal)
@@ -23,7 +23,7 @@ void receive(client_t *cli)
     char **arr = NULL;
     char buffer[5024];
     int len = 0;
-    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", NULL};
+    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE", NULL};
 
     if ((len = recv(cli->sockid, buffer, 5024 - 1, 0)) < 0)
         return;
@@ -41,7 +41,7 @@ void send_to_server(client_t *cli, char *line)
 {
     char **arr = str_warray(line, ' ');
     char *args[] = {"/login", "/logout",\
-     "/user", "/users", "/send", "/messages", NULL};
+     "/user", "/users", "/send", "/messages", "/create", NULL};
 
     if (arr[0] == NULL)
         return;

@@ -33,6 +33,7 @@ void set_clients(server_t *s)
         s->list_clients->next->next = NULL;
         s->list_clients->next->prev = s->list_clients;
         s->list_clients->position = i;
+        s->list_clients->contex = ANY;
     }
     go_prev(s);
 }
