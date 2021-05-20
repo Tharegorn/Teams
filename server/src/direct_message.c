@@ -56,6 +56,7 @@ void send_message(server_t *s, char **arr)
             save_message(arr, name);
             dprintf(s->list_clients->fd, "PM \"%s\" \"%s\"\n",\
              name, arr[2]);
+            break;
         }
     }
     go_prev(s);
