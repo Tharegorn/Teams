@@ -25,6 +25,7 @@
 #include <uuid/uuid.h>
 #include <time.h>
 #include <signal.h>
+#include <sys/stat.h>
 
 #include "logging_server.h"
 #include "logging_client.h"
@@ -44,6 +45,13 @@ typedef enum context
 
 } context_t;
 
+typedef struct teams_s
+{
+    char *teams;
+    char *channel;
+    char *thread;
+} teams_t;
+
 typedef struct client_s client_t;
 
 typedef struct client_s
@@ -52,6 +60,7 @@ typedef struct client_s
     char *user_uuid;
     char *name;
     int position;
+    teams_t *teams;
     context_t contex;
     logged_t log_status;
     client_t *next;
@@ -91,5 +100,8 @@ void users(server_t *s, char **arr);
 void set_clients(server_t *s);
 char *c(char **str, int start);
 void create(server_t *s, char **arr);
-typedef void(*commands)(server_t *s, char **command);
+void create_team(char **arr, char *user_uuid, int fd);
+void create_channel(server_t *s, char **arr);
+void use(server_t *s, char **arr);
+typedef void (*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */

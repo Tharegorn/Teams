@@ -68,5 +68,7 @@ void send_users(client_t *cli, char **arr);
 void rec_create(client_t *cli, char **arr);
 void send_create(client_t *cli, char **arr);
 
+void send_use(client_t *cli, char **arr);
+
 typedef void(*commands)(client_t *cli, char **command);
 #endif /* !CLIENT_H_ */

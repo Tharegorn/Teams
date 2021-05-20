@@ -36,7 +36,7 @@ void save_message(char **arr, char *sender_uuid)
     strcpy(file, "./server/logs/PM/");
     strcat(file, arr[1]);
     strcat(file, ".log");
-    if(access(file, F_OK ) != 0 )
+    if(access(file, F_OK ) != 0)
         fd = fopen(file, "w");
     else
         fd = fopen(file, "a");

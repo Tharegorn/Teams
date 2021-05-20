@@ -10,7 +10,7 @@
 static commands rec[] = {&rec_login, &rec_logout, &rec_user,\
  &rec_users, &rec_send, &rec_msg, &rec_create};
 static commands to_server[] = {&send_login, &send_logout,\
- &send_user, &send_users, &send_send, &send_msg, &send_create};
+ &send_user, &send_users, &send_send, &send_msg, &send_create, &send_use};
 int run = 1;
 
 void handle_signal(__attribute__((unused)) int signal)
@@ -41,7 +41,7 @@ void send_to_server(client_t *cli, char *line)
 {
     char **arr = str_warray(line, ' ');
     char *args[] = {"/login", "/logout",\
-     "/user", "/users", "/send", "/messages", "/create", NULL};
+     "/user", "/users", "/send", "/messages", "/create", "/use", NULL};
 
     if (arr[0] == NULL)
         return;

@@ -21,6 +21,14 @@ void go_prev(server_t *s)
      s->list_clients = s->list_clients->prev);
 }
 
+void set_team_to_null(server_t *s)
+{
+    s->list_clients->teams = malloc(sizeof(teams_t));
+    s->list_clients->teams->teams = NULL;
+    s->list_clients->teams->channel = NULL;
+    s->list_clients->teams->thread = NULL;
+}
+
 void set_clients(server_t *s)
 {
     load_users();
@@ -34,6 +42,7 @@ void set_clients(server_t *s)
         s->list_clients->next->prev = s->list_clients;
         s->list_clients->position = i;
         s->list_clients->contex = ANY;
+        set_team_to_null(s);
     }
     go_prev(s);
 }
