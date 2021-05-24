@@ -8,9 +8,9 @@
 #include "client.h"
 
 static commands rec[] = {&rec_login, &rec_logout, &rec_user,\
- &rec_users, &rec_send, &rec_msg, &rec_create, &rec_use, &rec_list};
+ &rec_users, &rec_send, &rec_msg, &rec_create, &rec_use, &rec_list, &rec_info};
 static commands to_server[] = {&send_login, &send_logout,\
- &send_user, &send_users, &send_send, &send_msg, &send_create, &send_use, &send_list};
+ &send_user, &send_users, &send_send, &send_msg, &send_create, &send_use, &send_list, &send_info};
 int run = 1;
 
 void handle_signal(__attribute__((unused)) int signal)
@@ -23,7 +23,7 @@ void receive(client_t *cli)
     char **arr = NULL;
     char buffer[5024];
     int len = 0;
-    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE", "USE", "LIST", NULL};
+    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE", "USE", "LIST", "INFO", NULL};
 
     if ((len = recv(cli->sockid, buffer, 5024 - 1, 0)) < 0)
         return;
@@ -42,7 +42,7 @@ void send_to_server(client_t *cli, char *line)
     char **arr = NULL;
     int j = 0;
     char *args[] = {"/login", "/logout",\
-     "/user", "/users", "/send", "/messages", "/create", "/use", "/list", NULL};
+     "/user", "/users", "/send", "/messages", "/create", "/use", "/list", "/info", NULL};
 
     if (strlen(line) == 0) {
         client_error_unauthorized();

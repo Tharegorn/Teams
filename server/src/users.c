@@ -18,7 +18,6 @@ void go_pos(int pos, server_t *s)
 
 int is_online(server_t *s, char *uuid)
 {
-    go_prev(s);
     for (; s->l_cli->next != NULL;\
     s->l_cli = s->l_cli->next) {
         if (strcmp(s->l_cli->u_uuid, uuid) == 0) {
@@ -41,6 +40,7 @@ void users(server_t *s, __attribute__((unused))char **array)
 
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
+        go_prev(s);
         on = is_online(s, arr[1]);
         go_pos(pos, s);
         dprintf(s->l_cli->fd, "USERS %s %s %d\n", arr[1], arr[0], on);

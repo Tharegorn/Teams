@@ -107,5 +107,8 @@ void create_thread(server_t *s, char **arr);
 void create_reply(server_t *s, char **arr);
 int check_params(server_t *s);
 void list(server_t *s, char **array);
+void info(server_t *s, char **arr);
+void go_pos(int pos, server_t *s);
+int is_online(server_t *s, char *uuid);
 typedef void (*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */
