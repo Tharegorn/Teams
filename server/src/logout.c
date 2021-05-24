@@ -4,8 +4,16 @@
 ** File description:
 ** logout
 */
-
 #include "server.h"
+
+void free_cli(server_t *s)
+{
+    s->l_cli->fd = 0;
+    free(s->l_cli->name);
+    free(s->l_cli->u_uuid);
+    s->l_cli->log_status = NO;
+    s->l_cli->contex = ANY;
+}
 
 void logout(server_t *s, __attribute__((unused))char **arr)
 {
@@ -17,19 +25,13 @@ void logout(server_t *s, __attribute__((unused))char **arr)
         return;
     server_event_user_logged_out(s->l_cli->u_uuid);
     go_prev(s);
-    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
         if (s->l_cli->log_status == YES && s->l_cli->position != position)
             dprintf(s->l_cli->fd, "LOGOUT DISPLAY \"%s\" \"%s\"", uuid, name);
-    }
     go_prev(s);
-    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
         if (s->l_cli->position == position)
             break;
-    }
     close(s->l_cli->fd);
-    s->l_cli->fd = 0;
-    free(s->l_cli->name);
-    free(s->l_cli->u_uuid);
-    s->l_cli->log_status = NO;
-    s->l_cli->contex = ANY;
+    free_cli(s);
 }

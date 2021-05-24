@@ -98,7 +98,6 @@ void go_prev(server_t *s);
 void retreive_message(server_t *s, char **arr);
 void users(server_t *s, char **arr);
 void set_clients(server_t *s);
-char *c(char **str, int start);
 void create(server_t *s, char **arr);
 void create_team(char **arr, char *u_uuid, int fd);
 void create_channel(server_t *s, char **arr);

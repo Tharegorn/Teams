@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-int run = 1;
+int run;
 
 void sig_handler(__attribute__((unused)) int signal)
 {
@@ -16,10 +16,10 @@ void sig_handler(__attribute__((unused)) int signal)
 
 void init_server(server_t *s)
 {
-    fd_set write_fd;
-    fd_set read_fd;
     int tmp = s->sockid;
     int nw_socket;
+    fd_set write_fd;
+    fd_set read_fd;
     struct sockaddr_in adr;
     socklen_t ads = sizeof(adr);
 
@@ -30,8 +30,8 @@ void init_server(server_t *s)
         if (select(tmp + 1, &read_fd, &write_fd, NULL, 0x0) < 0)
             break;
         if (FD_ISSET(s->sockid, &read_fd)) {
-            if ((nw_socket = accept(s->sockid,\
-             (struct sockaddr *)&adr, &ads)) < 0)
+            if ((nw_socket = accept(s->sockid,
+            (struct sockaddr *)&adr, &ads)) < 0)
                 break;
             set_socketclient(s, &nw_socket);
         }
@@ -91,6 +91,7 @@ int main(int ac, char **av)
     }
     if (serv_handling(s) == 84)
         return 84;
+    run = 1;
     init_server(s);
     return 0;
 }

@@ -9,12 +9,12 @@
 
 void info_user(server_t *s)
 {
-    FILE *fd = fopen("./server/logs/user_uuid.log", "r+");
-    char *line;
-    char **arr;
-    size_t size = 0;
+    char *line = NULL;
+    char **arr = NULL;
     int pos = s->l_cli->position;
     int on = 0;
+    size_t size = 0;
+    FILE *fd = fopen("./server/logs/user_uuid.log", "r+");
 
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
@@ -32,15 +32,16 @@ void info_user(server_t *s)
 
 void info_team(server_t *s)
 {
-    FILE *fd = fopen("./server/logs/teams_uuid.log", "r+");
-    char *line;
-    char **arr;
+    char *line = NULL;
+    char **arr = NULL;
     size_t size = 0;
+    FILE *fd = fopen("./server/logs/teams_uuid.log", "r+");
 
     while(getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->teams) == 0)
-            dprintf(s->l_cli->fd, "INFO TEAM \"%s\" \"%s\" \"%s\"\n", arr[1], arr[0], arr[2]);
+            dprintf(s->l_cli->fd, "INFO TEAM \"%s\" \"%s\" \"%s\"\n", arr[1],
+            arr[0], arr[2]);
     }
     free(line);
     fclose(fd);
@@ -48,10 +49,10 @@ void info_team(server_t *s)
 
 void info_chan(server_t *s)
 {
-    FILE *fd;
     char *line;
     char **arr;
     size_t size = 0;
+    FILE *fd;
 
     chdir("./server/logs/teams/");
     chdir(s->l_cli->teams->teams);
@@ -59,7 +60,8 @@ void info_chan(server_t *s)
     while(getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->channel) == 0)
-            dprintf(s->l_cli->fd, "INFO CHAN \"%s\" \"%s\" \"%s\"\n", arr[1], arr[0], arr[2]);
+            dprintf(s->l_cli->fd, "INFO CHAN \"%s\" \"%s\" \"%s\"\n", arr[1],
+            arr[0], arr[2]);
     }
     chdir("../../../../");
     free(line);
@@ -80,7 +82,9 @@ void info_thread(server_t *s)
     while(getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->thread) == 0)
-            dprintf(s->l_cli->fd, "INFO TH \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"\n", arr[1], arr[4], arr[3], arr[0], arr[2]);
+            dprintf(s->l_cli->fd,
+            "INFO TH \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"\n",
+            arr[1], arr[4], arr[3], arr[0], arr[2]);
     }
     chdir("../../../../../");
     free(line);

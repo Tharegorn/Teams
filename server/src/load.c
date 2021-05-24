@@ -9,7 +9,7 @@
 
 void load_users(void)
 {
-    char *line;
+    char *line = NULL;
     char **arr = NULL;
     size_t size = 0;
     FILE *fd = fopen("./server/logs/user_uuid.log", "r");

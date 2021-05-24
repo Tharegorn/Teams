@@ -9,10 +9,10 @@
 
 int channel_exists(char *name, char *chan_name)
 {
-    FILE *fd;
     char *line = NULL;
     char **arr = NULL;
     size_t size = 0;
+    FILE *fd;
 
     chdir("./server/logs/teams/");
     chdir(name);
@@ -59,7 +59,8 @@ void create_channel(server_t *s, char **arr)
     if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&\
      channel_exists(s->l_cli->teams->teams, arr[1]) == 1) {
         add_channel(uuid, arr, s->l_cli->teams->teams);
-        dprintf(s->l_cli->fd, "CREATE CHANNEL \"%s\" \"%s\" \"%s\"\n", uuid, arr[1], arr[2]);
+        dprintf(s->l_cli->fd, "CREATE CHANNEL \"%s\" \"%s\" \"%s\"\n", uuid,
+        arr[1], arr[2]);
     } else
         dprintf(s->l_cli->fd, "CREATE ERROR\n");
     free(uuid);

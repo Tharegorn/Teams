@@ -31,12 +31,12 @@ int is_online(server_t *s, char *uuid)
 
 void users(server_t *s, __attribute__((unused))char **array)
 {
-    FILE *fd = fopen("./server/logs/user_uuid.log", "r+");
     char *line;
     char **arr;
-    size_t size = 0;
     int pos = s->l_cli->position;
     int on = 0;
+    size_t size = 0;
+    FILE *fd = fopen("./server/logs/user_uuid.log", "r+");
 
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');

@@ -43,14 +43,14 @@ time_t fill_file(server_t *s, char *title, char *body, char *uuid)
     chdir(s->l_cli->teams->channel);
     fd = fopen("list_threads", "a");
     fprintf(fd, "\"%s\" \"%s\" \"%s\" \"%ld\" \"%s\"\n",
-     title, uuid, body, now, s->l_cli->u_uuid);
+    title, uuid, body, now, s->l_cli->u_uuid);
     mkdir(uuid, 0700);
     chdir(uuid);
     file = fopen("replies", "w+");
     fclose(file);
     fclose(fd);
     server_event_thread_created(s->l_cli->teams->channel, uuid,
-     s->l_cli->u_uuid, title, body);
+    s->l_cli->u_uuid, title, body);
     chdir("../../../../../../");
     return now;
 }
@@ -59,7 +59,9 @@ void add_thread(server_t *s, char *title, char *body, char *uuid)
 {
     time_t t = fill_file(s, title, body, uuid);
 
-    dprintf(s->l_cli->fd, "CREATE THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n", uuid, s->l_cli->u_uuid, t, title, body);
+    dprintf(s->l_cli->fd,
+    "CREATE THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
+    uuid, s->l_cli->u_uuid, t, title, body);
 }
 
 
@@ -67,8 +69,9 @@ void create_thread(server_t *s, char **arr)
 {
     char *uuid = gen_uuid();
 
-    if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 512 &&\
-     thread_exists(s->l_cli->teams->teams, s->l_cli->teams->channel, arr[1]) == 1) {
+    if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 512 &&
+    thread_exists(s->l_cli->teams->teams,
+    s->l_cli->teams->channel, arr[1]) == 1) {
         add_thread(s, arr[1], arr[2], uuid);
     } else
         dprintf(s->l_cli->fd, "CREATE ERROR\n");

@@ -34,10 +34,10 @@ void add_user_two(server_t *s, char **arr, char **array, int res)
     } else {
         s->l_cli->name = strdup(arr[1]);
         s->l_cli->u_uuid = strdup(gen_uuid());
-        fprintf(fd, "\"%s\" \"%s\"\n", s->l_cli->name,\
-         s->l_cli->u_uuid);
-        server_event_user_created(s->l_cli->u_uuid,\
-         s->l_cli->name);
+        fprintf(fd, "\"%s\" \"%s\"\n", s->l_cli->name,
+        s->l_cli->u_uuid);
+        server_event_user_created(s->l_cli->u_uuid,
+        s->l_cli->name);
     }
     server_event_user_logged_in(s->l_cli->u_uuid);
     display_all(s, s->l_cli->u_uuid, s->l_cli->name);
@@ -47,8 +47,8 @@ void add_user(server_t *s, char **arr)
 {
     char *line = NULL;
     char **array = NULL;
-    size_t size = 0;
     int res = 0;
+    size_t size = 0;
     FILE *fd = fopen("./server/logs/user_uuid.log", "r+");
 
     while (getline(&line, &size, fd) != -1) {

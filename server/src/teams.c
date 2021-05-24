@@ -9,9 +9,9 @@
 
 int teams_exists(char *name)
 {
-    FILE *fd = fopen("./server/logs/teams_uuid.log", "r+");
     char *line = NULL;
     char **arr = NULL;
+    FILE *fd = fopen("./server/logs/teams_uuid.log", "r+");
     size_t size = 0;
 
     while (getline(&line, &size, fd) != -1) {
@@ -50,10 +50,11 @@ void create_team(char **arr, char *u_uuid, int fd)
 {
     char *uuid = gen_uuid();
 
-    if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&\
-     teams_exists(arr[1]) == 1) {
+    if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&
+    teams_exists(arr[1]) == 1) {
         add_team(uuid, arr[1], arr[2], u_uuid);
-        dprintf(fd, "CREATE TEAM \"%s\" \"%s\" \"%s\"\n", uuid, arr[1], arr[2]);
+        dprintf(fd, "CREATE TEAM \"%s\" \"%s\" \"%s\"\n", uuid,
+        arr[1], arr[2]);
     } else
         dprintf(fd, "CREATE ERROR\n");
     free(uuid);

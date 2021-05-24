@@ -21,10 +21,12 @@ void add_reply(server_t *s, char *body)
     fd = fopen("replies", "a");
     fprintf(fd, "\"%s\" \"%s\" \"%ld\" \"%s\"\n", th, uu, time(NULL), body);
     server_event_reply_created(th, uu, body);
-    dprintf(s->l_cli->fd, "CREATE REP \"%s\" \"%s\" \"%s\" \"%s\"\n", t, th, uu, body);
+    dprintf(s->l_cli->fd, "CREATE REP \"%s\" \"%s\" \"%s\" \"%s\"\n",
+    t, th, uu, body);
     chdir("../../../../../../");
     fclose(fd);
 }
+
 void create_reply(server_t *s, char **arr)
 {
     if (strlen(arr[1]) <= 512)

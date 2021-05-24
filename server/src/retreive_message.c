@@ -7,27 +7,6 @@
 
 #include "server.h"
 
-char *c(char **str, int start)
-{
-    char *tmp = NULL;
-    int size = 0;
-    int words = 0;
-
-    if (str[3] == NULL)
-        return str[2];
-    for (int i = start; str[i]; i++, words++)
-        size += strlen(str[i]);
-    tmp = malloc(sizeof (char) * (size + words + 1));
-    tmp[0] = '\0';
-    for (int i = start; str[i]; i++) {
-        tmp = strcat(tmp, str[i]);
-        tmp = strcat(tmp, " ");
-    }
-    tmp[size + words] = '\0';
-    tmp = strdup(tmp);
-    return tmp;
-}
-
 int get_path(server_t *s, char *file)
 {
     strcpy(file, "./server/logs/PM/");
@@ -62,11 +41,11 @@ void retreive(server_t *s, char *uuid)
     if (get_path(s, file) == 1)
         return;
     fd = fopen(file, "r+");
-    while(getline(&line, &size, fd) != -1) {
+    while (getline(&line, &size, fd) != -1) {
         a = str_warray(line, ' ');
         if (strcmp(a[0], uuid) == 0) {
-            dprintf(s->l_cli->fd, "MSG \"%s\" \"%s\" \"%s\"\n",\
-             a[0], a[1], a[2]);
+            dprintf(s->l_cli->fd, "MSG \"%s\" \"%s\" \"%s\"\n",
+            a[0], a[1], a[2]);
             usleep(0.1);
             any = 1;
         }
@@ -78,8 +57,8 @@ void retreive_message(server_t *s, char **arr)
 {
     char *line = NULL;
     char **a = NULL;
-    size_t size = 0;
     int exists = 0;
+    size_t size = 0;
     FILE *fd = fopen("./server/logs/user_uuid.log", "r+");
 
     while (getline(&line, &size, fd) != -1) {

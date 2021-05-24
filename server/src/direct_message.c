@@ -60,8 +60,7 @@ void send_message(server_t *s, char **arr)
         }
     }
     go_prev(s);
-    for (; s->l_cli->next != NULL;\
-    s->l_cli = s->l_cli->next) {
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
         if (s->l_cli->position == stk)
             break;
     }
@@ -70,12 +69,12 @@ void send_message(server_t *s, char **arr)
 
 void direct_message(server_t *s, char **arr)
 {
-
     char **array;
     char *line;
     size_t size = 0;
     FILE *fd;
     int exists = 0;
+
     if (arr[1] == NULL || arr[2] == NULL)
         return;
     fd = fopen("./server/logs/user_uuid.log", "r");
@@ -86,7 +85,7 @@ void direct_message(server_t *s, char **arr)
             exists = 1;
         }
     }
-    if (exists == 0) {
+    if (exists == 0)
         dprintf(s->l_cli->fd, "PM NULL %s\n", arr[1]);
-    }
+    fclose(fd);
 }
