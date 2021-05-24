@@ -7,9 +7,8 @@
 
 #include "client.h"
 
-void rec_info(client_t *c, char **a)
+void rec_info(__attribute__((unused))client_t *c, char **a)
 {
-    (void)c;
     if (strcmp(a[1], "TEAM") == 0)
         client_print_team(a[2], a[3], a[4]);
     if (strcmp(a[1], "CHAN") == 0)

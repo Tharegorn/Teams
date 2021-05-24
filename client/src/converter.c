@@ -28,4 +28,3 @@ char *message_convert(char **str, int start)
     tmp = strdup(tmp);
     return tmp;
 }
-

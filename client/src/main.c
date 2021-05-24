@@ -7,11 +7,7 @@
 
 #include "client.h"
 
-static commands rec[] = {&rec_login, &rec_logout, &rec_user,\
- &rec_users, &rec_send, &rec_msg, &rec_create, &rec_use, &rec_list, &rec_info};
-static commands to_server[] = {&send_login, &send_logout,\
- &send_user, &send_users, &send_send, &send_msg, &send_create, &send_use, &send_list, &send_info};
-int run = 1;
+int run;
 
 void handle_signal(__attribute__((unused)) int signal)
 {
@@ -23,7 +19,11 @@ void receive(client_t *cli)
     char **arr = NULL;
     char buffer[5024];
     int len = 0;
-    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE", "USE", "LIST", "INFO", NULL};
+    commands rec[] = {&rec_login, &rec_logout, &rec_user,
+    &rec_users, &rec_send, &rec_msg, &rec_create, &rec_use,
+    &rec_list, &rec_info};
+    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE",
+    "USE", "LIST", "INFO", NULL};
 
     if ((len = recv(cli->sockid, buffer, 5024 - 1, 0)) < 0)
         return;
@@ -41,8 +41,12 @@ void send_to_server(client_t *cli, char *line)
 {
     char **arr = NULL;
     int j = 0;
-    char *args[] = {"/login", "/logout",\
-     "/user", "/users", "/send", "/messages", "/create", "/use", "/list", "/info", NULL};
+    commands to_server[] = {&send_login, &send_logout, &send_user,
+    &send_users, &send_send, &send_msg, &send_create, &send_use,
+    &send_list, &send_info};
+    char *args[] = {"/login", "/logout",
+    "/user", "/users", "/send", "/messages", "/create", "/use", "/list",
+    "/info", NULL};
 
     if (strlen(line) == 0) {
         client_error_unauthorized();
@@ -86,22 +90,23 @@ void loop(client_t *cli)
 
 int main(int ac, char **av)
 {
-    if (ac != 3)
-        return 84;
-
-    client_t *cli = malloc(sizeof(client_t));
+    client_t *cli = NULL;
     struct sockaddr_in sockaddr;
 
+    if (ac != 3)
+        return 84;
+    cli = malloc(sizeof(client_t));
     cli->sockid = socket(AF_INET, SOCK_STREAM, 0);
     bzero(&sockaddr, sizeof(sockaddr));
     sockaddr.sin_family = AF_INET;
     sockaddr.sin_addr.s_addr = inet_addr(av[1]);
     sockaddr.sin_port = htons(atoi(av[2]));
-    if (connect(cli->sockid, (struct sockaddr *)&sockaddr,\
-     sizeof(sockaddr)) < 0) {
+    if (connect(cli->sockid, (struct sockaddr *)&sockaddr,
+    sizeof(sockaddr)) < 0) {
         perror("Error on connect\n");
-        exit(0);
+        exit(84);
     }
+    run = 1;
     loop(cli);
     return 0;
 }

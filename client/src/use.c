@@ -9,7 +9,6 @@
 
 void rec_use(__attribute__((unused))client_t *c, __attribute((unused))char **a)
 {
-
 }
 
 void second_use(int id, char **arr)

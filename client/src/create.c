@@ -20,7 +20,8 @@ void rec_create(__attribute__((unused))client_t *cli, char **arr)
     if (strcmp(arr[1], "THREAD") == 0 && strcmp(arr[2], "UNKNOW") == 0)
         client_error_unknown_thread(arr[3]);
     else if (strcmp(arr[1], "THREAD") == 0)
-        client_event_thread_created(arr[2], arr[3], (time_t)atoi(arr[4]), arr[5], arr[6]);
+        client_event_thread_created(arr[2], arr[3], (time_t)atoi(arr[4]),
+        arr[5], arr[6]);
     if (strcmp(arr[1], "REP") == 0)
         client_event_thread_reply_received(arr[2], arr[3], arr[4], arr[5]);
     if (strcmp(arr[1], "ERROR") == 0)
