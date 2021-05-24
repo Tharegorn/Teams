@@ -20,7 +20,7 @@ void send_send(client_t *cli, char **arr)
     if (cli->log_status == NO)
         client_error_unauthorized();
     else if (arr[1] == NULL || arr[2] == NULL)
-        printf("Invalid Command : /send <user_uuid> <message_body>\n");
+        printf("Invalid Command : /send <u_uuid> <message_body>\n");
     else
         dprintf(cli->sockid, "PM \"%s\" \"%s\"\n", arr[1], arr[2]);
 }

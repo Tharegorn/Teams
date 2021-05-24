@@ -8,9 +8,9 @@
 #include "client.h"
 
 static commands rec[] = {&rec_login, &rec_logout, &rec_user,\
- &rec_users, &rec_send, &rec_msg, &rec_create};
+ &rec_users, &rec_send, &rec_msg, &rec_create, &rec_use, &rec_list};
 static commands to_server[] = {&send_login, &send_logout,\
- &send_user, &send_users, &send_send, &send_msg, &send_create, &send_use};
+ &send_user, &send_users, &send_send, &send_msg, &send_create, &send_use, &send_list};
 int run = 1;
 
 void handle_signal(__attribute__((unused)) int signal)
@@ -23,7 +23,7 @@ void receive(client_t *cli)
     char **arr = NULL;
     char buffer[5024];
     int len = 0;
-    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE", NULL};
+    char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE", "USE", "LIST", NULL};
 
     if ((len = recv(cli->sockid, buffer, 5024 - 1, 0)) < 0)
         return;
@@ -39,18 +39,27 @@ void receive(client_t *cli)
 
 void send_to_server(client_t *cli, char *line)
 {
-    char **arr = str_warray(line, ' ');
+    char **arr = NULL;
+    int j = 0;
     char *args[] = {"/login", "/logout",\
-     "/user", "/users", "/send", "/messages", "/create", "/use", NULL};
+     "/user", "/users", "/send", "/messages", "/create", "/use", "/list", NULL};
 
+    if (strlen(line) == 0) {
+        client_error_unauthorized();
+        return;
+    }
+    arr = str_warray(line, ' ');
     if (arr[0] == NULL)
         return;
     for (int i = 0; args[i]; i++) {
         if (strcmp(args[i], arr[0]) == 0) {
             to_server[i](cli, arr);
+            j = 1;
             break;
         }
     }
+    if (j == 0)
+        client_error_unauthorized();
 }
 
 void loop(client_t *cli)
@@ -70,7 +79,7 @@ void loop(client_t *cli)
             receive(cli);
     }
     if (cli->log_status == YES)
-        client_event_logged_out(cli->user_uuid, cli->name);
+        client_event_logged_out(cli->u_uuid, cli->name);
     dprintf(cli->sockid, "LOGOUT\n");
     exit(0);
 }

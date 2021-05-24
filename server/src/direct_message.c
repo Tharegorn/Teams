@@ -46,23 +46,23 @@ void save_message(char **arr, char *sender_uuid)
 
 void send_message(server_t *s, char **arr)
 {
-    int stk = s->list_clients->position;
-    char *name = strdup(s->list_clients->user_uuid);
+    int stk = s->l_cli->position;
+    char *name = strdup(s->l_cli->u_uuid);
 
     go_prev(s);
-    for (; s->list_clients->next != NULL;\
-     s->list_clients = s->list_clients->next) {
-        if (strcmp(s->list_clients->user_uuid, arr[1]) == 0) {
+    for (; s->l_cli->next != NULL;\
+     s->l_cli = s->l_cli->next) {
+        if (strcmp(s->l_cli->u_uuid, arr[1]) == 0) {
             save_message(arr, name);
-            dprintf(s->list_clients->fd, "PM \"%s\" \"%s\"\n",\
+            dprintf(s->l_cli->fd, "PM \"%s\" \"%s\"\n",\
              name, arr[2]);
             break;
         }
     }
     go_prev(s);
-    for (; s->list_clients->next != NULL;\
-    s->list_clients = s->list_clients->next) {
-        if (s->list_clients->position == stk)
+    for (; s->l_cli->next != NULL;\
+    s->l_cli = s->l_cli->next) {
+        if (s->l_cli->position == stk)
             break;
     }
     free(name);
@@ -87,6 +87,6 @@ void direct_message(server_t *s, char **arr)
         }
     }
     if (exists == 0) {
-        dprintf(s->list_clients->fd, "PM NULL %s\n", arr[1]);
+        dprintf(s->l_cli->fd, "PM NULL %s\n", arr[1]);
     }
 }

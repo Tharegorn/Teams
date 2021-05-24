@@ -57,7 +57,7 @@ typedef struct client_s client_t;
 typedef struct client_s
 {
     int fd;
-    char *user_uuid;
+    char *u_uuid;
     char *name;
     int position;
     teams_t *teams;
@@ -77,7 +77,7 @@ typedef struct server_s
     int cli_max;
     struct pollfd *pfds;
     int clients[30];
-    client_t *list_clients;
+    client_t *l_cli;
 } server_t;
 
 char *get_next_line(int fd);
@@ -100,8 +100,12 @@ void users(server_t *s, char **arr);
 void set_clients(server_t *s);
 char *c(char **str, int start);
 void create(server_t *s, char **arr);
-void create_team(char **arr, char *user_uuid, int fd);
+void create_team(char **arr, char *u_uuid, int fd);
 void create_channel(server_t *s, char **arr);
 void use(server_t *s, char **arr);
+void create_thread(server_t *s, char **arr);
+void create_reply(server_t *s, char **arr);
+int check_params(server_t *s);
+void list(server_t *s, char **array);
 typedef void (*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */

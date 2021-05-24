@@ -38,12 +38,12 @@ void init_server(server_t *s)
         handle_input(s, &read_fd, &write_fd);
     }
     go_prev(s);
-    for (; s->list_clients->next != NULL;\
-     s->list_clients = s->list_clients->next) {
-        if (s->list_clients->fd != 0) {
-            if (s->list_clients->log_status == YES)
-                server_event_user_logged_out(s->list_clients->user_uuid);
-            dprintf(s->list_clients->fd, "LOGOUT\n");
+    for (; s->l_cli->next != NULL;\
+     s->l_cli = s->l_cli->next) {
+        if (s->l_cli->fd != 0) {
+            if (s->l_cli->log_status == YES)
+                server_event_user_logged_out(s->l_cli->u_uuid);
+            dprintf(s->l_cli->fd, "LOGOUT REAL\n");
         }
     }
 }

@@ -9,52 +9,43 @@
 
 void free_teams(server_t *s)
 {
-    if (s->list_clients->teams->teams == NULL)
-        free(s->list_clients->teams->teams);
-    if (s->list_clients->teams->channel == NULL)
-        free(s->list_clients->teams->channel);
-    if (s->list_clients->teams->thread == NULL)
-        free(s->list_clients->teams->thread);
-}
-
-int team_exists(char *uuid)
-{
-    FILE *fd = fopen("./server/logs/teams_uuid.log", "r+");
-    char *line = NULL;
-    char **arr = NULL;
-    size_t size = 0;
-
-    while (getline(&line, &size, fd) != -1)
-    {
-        arr = str_warray(line, ' ');
-        if (strcmp(arr[1], uuid) == 0)
-        {
-            free(line);
-            fclose(fd);
-            return 0;
-        }
+    if (s->l_cli->teams->teams != NULL) {
+        free(s->l_cli->teams->teams);
+        s->l_cli->teams->teams = NULL;
     }
-    free(line);
-    fclose(fd);
-    return 1;
+    if (s->l_cli->teams->channel != NULL) {
+        free(s->l_cli->teams->channel);
+        s->l_cli->teams->channel = NULL;
+    }
+    if (s->l_cli->teams->thread != NULL) {
+        free(s->l_cli->teams->thread);
+        s->l_cli->teams->thread = NULL;
+    }
 }
 
 void use(server_t *s, char **arr)
 {
-    if (arr[1] == NULL)
-    {
-        free_teams(s);
-        s->list_clients->contex = ANY;
+    free_teams(s);
+    if (arr[1] == NULL) {
+        s->l_cli->contex = ANY;
+        return;
     }
-    else if (arr[2] == NULL)
-    {
-        if (team_exists(arr[1]) == 1)
-            dprintf(s->list_clients->fd, "USE TEAM NULL %s", arr[1]);
-        else
-        {
-            s->list_clients->contex = TEAM;
-            free_teams(s);
-            s->list_clients->teams->teams = strdup(arr[1]);
-        }
+    if (arr[2] == NULL) {
+        s->l_cli->contex = TEAM;
+        s->l_cli->teams->teams = strdup(arr[1]);
+        return;
+    }
+    if (arr[3] == NULL) {
+        s->l_cli->contex = CHANNEL;
+        s->l_cli->teams->teams = strdup(arr[1]);
+        s->l_cli->teams->channel = strdup(arr[2]);
+        return;
+    }
+    if (arr[4] == NULL) {
+        s->l_cli->contex = THREAD;
+        s->l_cli->teams->teams = strdup(arr[1]);
+        s->l_cli->teams->channel = strdup(arr[2]);
+        s->l_cli->teams->thread = strdup(arr[3]);
+        return;
     }
 }

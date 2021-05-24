@@ -31,10 +31,10 @@ char *c(char **str, int start)
 int get_path(server_t *s, char *file)
 {
     strcpy(file, "./server/logs/PM/");
-    strcat(file, s->list_clients->user_uuid);
+    strcat(file, s->l_cli->u_uuid);
     strcat(file, ".log");
     if (access(file, F_OK) != 0) {
-        dprintf(s->list_clients->fd, "MSG ANY\n");
+        dprintf(s->l_cli->fd, "MSG ANY\n");
         return 1;
     }
     return 0;
@@ -57,7 +57,7 @@ void retreive(server_t *s, char *uuid)
     char *line = NULL;
     char **a = NULL;
     size_t size = 0;
-    int any =  s->list_clients->fd;
+    int any =  s->l_cli->fd;
 
     if (get_path(s, file) == 1)
         return;
@@ -65,7 +65,7 @@ void retreive(server_t *s, char *uuid)
     while(getline(&line, &size, fd) != -1) {
         a = str_warray(line, ' ');
         if (strcmp(a[0], uuid) == 0) {
-            dprintf(s->list_clients->fd, "MSG \"%s\" \"%s\" \"%s\"\n",\
+            dprintf(s->l_cli->fd, "MSG \"%s\" \"%s\" \"%s\"\n",\
              a[0], a[1], a[2]);
             usleep(0.1);
             any = 1;
@@ -91,7 +91,7 @@ void retreive_message(server_t *s, char **arr)
         }
     }
     if (exists == 0)
-        dprintf(s->list_clients->fd, "MSG NULL %s\n", arr[1]);
+        dprintf(s->l_cli->fd, "MSG NULL %s\n", arr[1]);
     free(line);
     fclose(fd);
 }

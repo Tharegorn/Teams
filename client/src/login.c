@@ -9,10 +9,13 @@
 
 void rec_login(client_t *cli, char **arr)
 {
-    cli->name = strdup(arr[2]);
-    cli->user_uuid = strdup(arr[1]);
-    cli->log_status = YES;
-    client_event_logged_in(cli->user_uuid, cli->name);
+    if (strcmp(arr[1], "CREATE") == 0) {
+        cli->name = strdup(arr[3]);
+        cli->u_uuid = strdup(arr[2]);
+        cli->log_status = YES;
+        client_event_logged_in(cli->u_uuid, cli->name);
+    } else
+        client_event_logged_in(arr[2], arr[3]);
 }
 
 void send_login(client_t *cli, char **arr)

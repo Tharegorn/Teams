@@ -7,21 +7,40 @@
 
 #include "server.h"
 
+void display_all(server_t *s, char *uuid, char *name)
+{
+    int position = s->l_cli->position;
+
+    dprintf(s->l_cli->fd, "LOGIN CREATE \"%s\" \"%s\"\n",\
+    s->l_cli->u_uuid, s->l_cli->name);
+    go_prev(s);
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+        if (s->l_cli->log_status == YES && s->l_cli->position != position)
+            dprintf(s->l_cli->fd, "LOGIN DISPLAY \"%s\" \"%s\"\n", uuid, name);
+    }
+    go_prev(s);
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+        if (s->l_cli->position == position)
+            break;
+    }
+}
 void add_user_two(server_t *s, char **arr, char **array, int res)
 {
     FILE *fd = fopen("./server/logs/user_uuid.log", "a");
 
     if (res == 1) {
-        s->list_clients->name = strdup(array[0]);
-        s->list_clients->user_uuid = strdup(array[1]);
+        s->l_cli->name = strdup(array[0]);
+        s->l_cli->u_uuid = strdup(array[1]);
     } else {
-        s->list_clients->name = strdup(arr[1]);
-        s->list_clients->user_uuid = strdup(gen_uuid());
-        fprintf(fd, "\"%s\" \"%s\"\n", s->list_clients->name,\
-         s->list_clients->user_uuid);
-        server_event_user_created(s->list_clients->user_uuid,\
-         s->list_clients->name);
+        s->l_cli->name = strdup(arr[1]);
+        s->l_cli->u_uuid = strdup(gen_uuid());
+        fprintf(fd, "\"%s\" \"%s\"\n", s->l_cli->name,\
+         s->l_cli->u_uuid);
+        server_event_user_created(s->l_cli->u_uuid,\
+         s->l_cli->name);
     }
+    server_event_user_logged_in(s->l_cli->u_uuid);
+    display_all(s, s->l_cli->u_uuid, s->l_cli->name);
 }
 
 void add_user(server_t *s, char **arr)
@@ -40,10 +59,7 @@ void add_user(server_t *s, char **arr)
         }
     }
     fclose(fd);
+    s->l_cli->log_status = YES;
     add_user_two(s, arr, array, res);
-    server_event_user_logged_in(s->list_clients->user_uuid);
-    s->list_clients->log_status = YES;
-    dprintf(s->list_clients->fd, "LOGIN \"%s\" \"%s\"\n",\
-    s->list_clients->user_uuid, s->list_clients->name);
     info_free(fd, line, arr);
 }

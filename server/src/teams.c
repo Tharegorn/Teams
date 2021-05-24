@@ -46,16 +46,15 @@ void add_team(char *uuid, char *name, char *description, char *u_uuid)
     fclose(fd);
 }
 
-void create_team(char **arr, char *user_uuid, int fd)
+void create_team(char **arr, char *u_uuid, int fd)
 {
     char *uuid = gen_uuid();
 
     if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&\
      teams_exists(arr[1]) == 1) {
-        add_team(uuid, arr[1], arr[2], user_uuid);
+        add_team(uuid, arr[1], arr[2], u_uuid);
         dprintf(fd, "CREATE TEAM \"%s\" \"%s\" \"%s\"\n", uuid, arr[1], arr[2]);
-    } else {
-        dprintf(fd, "CREATE TEAM NULL \"%s\"\n", uuid);
-    }
+    } else
+        dprintf(fd, "CREATE ERROR\n");
     free(uuid);
 }

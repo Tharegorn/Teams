@@ -37,7 +37,7 @@ typedef enum logged
 typedef struct client_s
 {
     int sockid;
-    char *user_uuid;
+    char *u_uuid;
     char *name;
     logged_t log_status;
 } client_t;
@@ -69,6 +69,10 @@ void rec_create(client_t *cli, char **arr);
 void send_create(client_t *cli, char **arr);
 
 void send_use(client_t *cli, char **arr);
+void rec_use(client_t *c, char **a);
 
+
+void rec_list(client_t *cli, char **arr);
+void send_list(client_t *cli, char **arr);
 typedef void(*commands)(client_t *cli, char **command);
 #endif /* !CLIENT_H_ */

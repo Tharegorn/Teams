@@ -1,8 +1,0 @@
-COMMAND |  COMMENT
-
-HELP |  Diplay All commands
-LOGIN <name> | Login to account with the name account given in parameters
-LOGOUT | LOGOUT
-USERS | Get list of all users
-USER <user_uuid> | Get Informations of user given in parameters
-PM <user_uuid> <message_body> | Send message to user given in parameters

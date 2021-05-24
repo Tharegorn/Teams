@@ -7,7 +7,7 @@
 
 #include "server.h"
 
-int channel_exists(char *name)
+int channel_exists(char *name, char *chan_name)
 {
     FILE *fd;
     char *line = NULL;
@@ -20,7 +20,7 @@ int channel_exists(char *name)
     chdir("../../../../");
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
-        if (strcmp(arr[0], name) == 0) {
+        if (strcmp(arr[0], chan_name) == 0) {
             free(line);
             fclose(fd);
             return 0;
@@ -57,10 +57,10 @@ void create_channel(server_t *s, char **arr)
     char *uuid = gen_uuid();
 
     if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&\
-     channel_exists(s->list_clients->teams->teams) == 1) {
-        add_channel(uuid, arr, s->list_clients->teams->teams);
-        dprintf(s->list_clients->fd, "CREATE CHANNEL \"%s\" \"%s\" \"%s\"\n", uuid, arr[1], arr[2]);
+     channel_exists(s->l_cli->teams->teams, arr[1]) == 1) {
+        add_channel(uuid, arr, s->l_cli->teams->teams);
+        dprintf(s->l_cli->fd, "CREATE CHANNEL \"%s\" \"%s\" \"%s\"\n", uuid, arr[1], arr[2]);
     } else
-        dprintf(s->list_clients->fd, "CREATE CHANNEL NULL \"%s\" \"%s\" \"%s\"\n", uuid, arr[1], arr[2]);
+        dprintf(s->l_cli->fd, "CREATE ERROR\n");
     free(uuid);
 }

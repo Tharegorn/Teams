@@ -17,31 +17,31 @@ client_t *create_client(int fd)
 
 void go_prev(server_t *s)
 {
-    for (; s->list_clients->prev != NULL;\
-     s->list_clients = s->list_clients->prev);
+    for (; s->l_cli->prev != NULL;\
+     s->l_cli = s->l_cli->prev);
 }
 
 void set_team_to_null(server_t *s)
 {
-    s->list_clients->teams = malloc(sizeof(teams_t));
-    s->list_clients->teams->teams = NULL;
-    s->list_clients->teams->channel = NULL;
-    s->list_clients->teams->thread = NULL;
+    s->l_cli->teams = malloc(sizeof(teams_t));
+    s->l_cli->teams->teams = NULL;
+    s->l_cli->teams->channel = NULL;
+    s->l_cli->teams->thread = NULL;
 }
 
 void set_clients(server_t *s)
 {
     load_users();
-    s->list_clients = malloc(sizeof(client_t));
-    s->list_clients->prev = NULL;
-    for (int i = 0; i < 30; i++, s->list_clients = s->list_clients->next) {
-        s->list_clients->fd = 0;
-        s->list_clients->log_status = NO;
-        s->list_clients->next = malloc(sizeof(client_t));
-        s->list_clients->next->next = NULL;
-        s->list_clients->next->prev = s->list_clients;
-        s->list_clients->position = i;
-        s->list_clients->contex = ANY;
+    s->l_cli = malloc(sizeof(client_t));
+    s->l_cli->prev = NULL;
+    for (int i = 0; i < 30; i++, s->l_cli = s->l_cli->next) {
+        s->l_cli->fd = 0;
+        s->l_cli->log_status = NO;
+        s->l_cli->next = malloc(sizeof(client_t));
+        s->l_cli->next->next = NULL;
+        s->l_cli->next->prev = s->l_cli;
+        s->l_cli->position = i;
+        s->l_cli->contex = ANY;
         set_team_to_null(s);
     }
     go_prev(s);
