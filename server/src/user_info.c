@@ -19,21 +19,18 @@ void user_info_two(server_t *s, char **arr, int exists, int stk)
     int online = 0;
     int fd_client = s->l_cli->fd;
 
-    if (exists == 0) {
+    if (exists == 0)
         dprintf(fd_client, "USER NULL %s\n", arr[1]);
-    } else {
+    else {
         go_prev(s);
-        for (; s->l_cli->next != NULL;\
-         s->l_cli = s->l_cli->next) {
-            if (strcmp(s->l_cli->u_uuid, arr[1]) == 0)
+        for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
+            if (s->l_cli->u_uuid != NULL &&
+            strcmp(s->l_cli->u_uuid, arr[1]) == 0)
                 online = 1;
-        }
         go_prev(s);
-        for (; s->l_cli->next != NULL;\
-        s->l_cli = s->l_cli->next) {
+        for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
             if (s->l_cli->position == stk)
                 break;
-        }
         dprintf(fd_client, "USER %s %s %d\n", arr[0], arr[1], online);
     }
 }
