@@ -111,5 +111,6 @@ void go_pos(int pos, server_t *s);
 int team_exists(char *uuid);
 int is_online(server_t *s, char *uuid);
 void sub(server_t *s, char **arr);
+int subed(server_t *s, char *name);
 typedef void (*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */

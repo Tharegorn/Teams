@@ -7,6 +7,32 @@
 
 #include "server.h"
 
+int subed(server_t *s, char *name)
+{
+    FILE *fd;
+    char *line = NULL;
+    char **arr = NULL;
+    size_t size = 0;
+
+    chdir("./server/logs/USERS/");
+    fd = fopen(s->l_cli->u_uuid, "r+");
+    while (fd != NULL && getline(&line, &size, fd) != -1) {
+        printf("%s\n", line);
+        arr = str_warray(line, ' ');
+        if (strcmp(arr[0], name) == 0) {
+            fclose(fd);
+            free(line);
+            chdir("../../../");
+            return 1;
+        }
+    }
+    if (fd != NULL)
+        fclose(fd);
+    free(line);
+    chdir("../../../");
+    return 0;
+}
+
 int already_sub(server_t *s, char *name)
 {
     FILE *fd = fopen(s->l_cli->u_uuid, "r+");
@@ -15,6 +41,7 @@ int already_sub(server_t *s, char *name)
     size_t size = 0;
 
     while (getline(&line, &size, fd) != -1) {
+        arr = str_warray(line, ' ');
         if (strcmp(arr[0], name) == 0) {
             fclose(fd);
             free(line);
@@ -48,8 +75,11 @@ void sub(server_t *s, char **arr)
     }
     chdir("./server/logs/USERS/");
     if( access( s->l_cli->u_uuid, F_OK ) == 0 ) {
-        if (already_sub(s, arr[1]) == 1)
+        if (already_sub(s, arr[1]) == 1) {
+            chdir("../../../");
+            dprintf(s->l_cli->fd, "SUB UNAUTH\n");
             return;
+        }
         fd = fopen(s->l_cli->u_uuid, "a");
     } else
         fd = fopen(s->l_cli->u_uuid, "w+");

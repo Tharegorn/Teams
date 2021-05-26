@@ -88,6 +88,10 @@ void create_channel(server_t *s, char **arr)
     char *uuid = gen_uuid();
     int pos = s->l_cli->position;
 
+    if (subed(s, s->l_cli->teams->teams) == 0) {
+        dprintf(s->l_cli->fd, "SUB UNAUTH\n");
+        return;
+    }
     if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&\
      channel_exists(s->l_cli->teams->teams, arr[1]) == 1) {
         add_channel(uuid, arr, s->l_cli->teams->teams);

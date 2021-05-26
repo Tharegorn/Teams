@@ -29,6 +29,10 @@ void add_reply(server_t *s, char *body)
 
 void create_reply(server_t *s, char **arr)
 {
+    if (subed(s, s->l_cli->teams->teams) == 0) {
+        dprintf(s->l_cli->fd, "SUB UNAUTH\n");
+        return;
+    }
     if (strlen(arr[1]) <= 512)
         add_reply(s, arr[1]);
     else

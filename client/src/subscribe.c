@@ -9,7 +9,10 @@
 
 void rec_sub(client_t *cli, char **arr)
 {
-    client_print_subscribed(cli->u_uuid, arr[1]);
+    if (arr[1] != NULL && strcmp(arr[1], "UNAUTH") == 0)
+        client_error_unauthorized();
+    else
+        client_print_subscribed(cli->u_uuid, arr[1]);
 }
 
 void send_sub(client_t *cli, char **arr)
