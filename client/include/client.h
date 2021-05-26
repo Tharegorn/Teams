@@ -77,5 +77,8 @@ void send_list(client_t *cli, char **arr);
 void rec_info(client_t *c, char **a);
 void send_info(client_t *c, char **a);
 
+void rec_sub(client_t *cli, char **arr);
+void send_sub(client_t *cli, char **arr);
+
 typedef void(*commands)(client_t *cli, char **command);
 #endif /* !CLIENT_H_ */

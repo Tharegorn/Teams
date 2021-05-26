@@ -83,7 +83,7 @@ void create(server_t *s, char **arr)
     if (check_params(s) == 1)
         return;
     if (s->l_cli->contex == ANY && arr[2] != NULL) {
-        create_team(arr, s->l_cli->u_uuid, s->l_cli->fd);
+        create_team(s, arr);
         return;
     }
     if (s->l_cli->contex == TEAM && arr[2] != NULL) {

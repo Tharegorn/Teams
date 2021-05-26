@@ -40,7 +40,8 @@ void save_message(char **arr, char *sender_uuid)
         fd = fopen(file, "w");
     else
         fd = fopen(file, "a");
-    fprintf(fd, "\"%s\" \"%ld\" \"%s\"\n",sender_uuid, time(NULL), arr[2]);
+    fprintf(fd, "\"%s\" \"%ld\" \"%s\"\n", sender_uuid, time(NULL), arr[2]);
+    server_event_private_message_sended(sender_uuid, arr[1], arr[2]);
     fclose(fd);
 }
 

@@ -46,16 +46,44 @@ void add_team(char *uuid, char *name, char *description, char *u_uuid)
     fclose(fd);
 }
 
-void create_team(char **arr, char *u_uuid, int fd)
+void contact_all(server_t *s, char **arr, char *uuid)
+{
+    int pos = s->l_cli->position;
+
+    go_prev(s);
+    for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+        if (s->l_cli->log_status == YES) {
+            dprintf(s->l_cli->fd, "CREATE TEAM \"%s\" \"%s\" \"%s\"\n", uuid,
+            arr[1], arr[2]);
+        }
+    }
+    go_prev(s);
+    for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
+        if (s->l_cli->position == pos)
+            break;
+}
+
+void create_sub(char *uuid)
+{
+    FILE *fd;
+
+    chdir("./server/logs/teams/");
+    chdir(uuid);
+    fd = fopen("subscribe", "w+");
+    fclose(fd);
+    chdir("../../../../");
+}
+
+void create_team(server_t *s, char **arr)
 {
     char *uuid = gen_uuid();
 
     if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&
     teams_exists(arr[1]) == 1) {
-        add_team(uuid, arr[1], arr[2], u_uuid);
-        dprintf(fd, "CREATE TEAM \"%s\" \"%s\" \"%s\"\n", uuid,
-        arr[1], arr[2]);
+        add_team(uuid, arr[1], arr[2], s->l_cli->u_uuid);
+        create_sub(uuid);
+        contact_all(s, arr, uuid);
     } else
-        dprintf(fd, "CREATE ERROR\n");
+        dprintf(s->l_cli->fd, "CREATE ERROR\n");
     free(uuid);
 }

@@ -99,7 +99,7 @@ void retreive_message(server_t *s, char **arr);
 void users(server_t *s, char **arr);
 void set_clients(server_t *s);
 void create(server_t *s, char **arr);
-void create_team(char **arr, char *u_uuid, int fd);
+void create_team(server_t *s, char **arr);
 void create_channel(server_t *s, char **arr);
 void use(server_t *s, char **arr);
 void create_thread(server_t *s, char **arr);
@@ -108,6 +108,8 @@ int check_params(server_t *s);
 void list(server_t *s, char **array);
 void info(server_t *s, char **arr);
 void go_pos(int pos, server_t *s);
+int team_exists(char *uuid);
 int is_online(server_t *s, char *uuid);
+void sub(server_t *s, char **arr);
 typedef void (*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */
