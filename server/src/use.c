@@ -47,5 +47,4 @@ void use(server_t *s, char **arr)
         s->l_cli->teams->teams = strdup(arr[1]);
     } else
         use_two(s, arr);
-    printf("%d\n", s->l_cli->contex);
 }
