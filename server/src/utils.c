@@ -21,10 +21,10 @@ void handle_commands(server_t *s, char *str)
 {
     char **arr = str_warray(str, ' ');
     char *instruction[] = {"LOGIN", "LOGOUT", "USER", "PM", "MSG",
-    "USERS", "CREATE", "USE", "LIST", "INFO", "SUB", NULL};
+    "USERS", "CREATE", "USE", "LIST", "INFO", "SUB", "UNSUB", "SUBED", NULL};
     commands list_commands[] = {&add_user, &logout, &user_info,
     &direct_message, &retreive_message, &users, &create, &use, &list, &info,
-    &sub};
+    &sub, &unsubscribe, &subscribed};
 
     if (arr[0] == NULL)
         return;
