@@ -25,10 +25,10 @@ void contact_on_reply(server_t *s, char *body, time_t t)
         array = str_warray(line, ' ');
         go_prev(s);
         for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
-            if (strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
+            if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
                 dprintf(s->l_cli->fd, "CREATE PRINT REP \"%s\" \"%s\" \"%ld\" \"%s\"\n",
                 th, uu, t, body);
-            } else if (strcmp(array[1], s->l_cli->u_uuid) == 0) {
+            } else if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0) {
                 dprintf(s->l_cli->fd, "CREATE EVENT REP \"%s\" \"%s\" \"%s\" \"%s\"\n",
                 te, th, uu, body);
             }

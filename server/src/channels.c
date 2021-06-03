@@ -74,16 +74,16 @@ void contact_all_chan(server_t *s, char **arr, char *uuid)
         array = str_warray(line, ' ');
         go_prev(s);
         for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
-            if (strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
+            if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
                 dprintf(s->l_cli->fd, "CREATE PRINT CHAN \"%s\" \"%s\" \"%s\"\n",
                 uuid, arr[1], arr[2]);
-            } else if (strcmp(array[1], s->l_cli->u_uuid) == 0) {
+            } else if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0) {
                 dprintf(s->l_cli->fd, "CREATE EVENT CHAN \"%s\" \"%s\" \"%s\"\n",
                 uuid, arr[1], arr[2]);
             }
         }
-        go_prev(s);
     }
+    go_prev(s);
     free_chan(line, fd);
 }
 

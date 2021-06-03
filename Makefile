@@ -34,4 +34,13 @@ re:
 	@make re --no-print-directory -C client
 	@export LD_LIBRARY_PATH="$PWD/libs/myteams/"
 
-.PHONY: all clean fclean re client server
+clear:
+	@rm -rf ./server/logs/teams/*
+	@rm -rf ./server/logs/USERS/*
+	@rm -rf ./server/logs/PM/*
+	@rm -rf ./server/logs/teams_uuid.log
+	@rm -rf ./server/logs/user_uuid.log
+	@touch ./server/logs/teams_uuid.log
+	@touch ./server/logs/user_uuid.log
+
+.PHONY: all clean fclean re client server clear
