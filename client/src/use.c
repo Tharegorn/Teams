@@ -16,9 +16,9 @@ void second_use(int id, char **arr)
     dprintf(id, "USE ");
     for (int i = 1; arr[i]; i++) {
         if (arr[i + 1] == NULL)
-           dprintf(id, "%s", arr[i]);
+            dprintf(id, "%s", arr[i]);
         else
-           dprintf(id, "%s ", arr[i]);
+            dprintf(id, "%s ", arr[i]);
     }
     dprintf(id, "\n");
 }

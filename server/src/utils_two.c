@@ -17,8 +17,7 @@ client_t *create_client(int fd)
 
 void go_prev(server_t *s)
 {
-    for (; s->l_cli->prev != NULL;\
-     s->l_cli = s->l_cli->prev);
+    for (; s->l_cli->prev != NULL; s->l_cli = s->l_cli->prev);
 }
 
 void set_team_to_null(server_t *s)
@@ -31,6 +30,7 @@ void set_team_to_null(server_t *s)
 
 void set_clients(server_t *s)
 {
+    signal(SIGINT, sig_handler);
     load_users();
     s->l_cli = malloc(sizeof(client_t));
     s->l_cli->prev = NULL;

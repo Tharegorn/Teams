@@ -11,7 +11,7 @@ void display_all(server_t *s, char *uuid, char *name)
 {
     int position = s->l_cli->position;
 
-    dprintf(s->l_cli->fd, "LOGIN CREATE \"%s\" \"%s\"\n",\
+    dprintf(s->l_cli->fd, "LOGIN CREATE \"%s\" \"%s\"\n",
     s->l_cli->u_uuid, s->l_cli->name);
     go_prev(s);
     for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
@@ -24,6 +24,7 @@ void display_all(server_t *s, char *uuid, char *name)
             break;
     }
 }
+
 void add_user_two(server_t *s, char **arr, char **array, int res)
 {
     FILE *fd = fopen("./server/logs/user_uuid.log", "a");

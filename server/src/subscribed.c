@@ -31,8 +31,8 @@ void list_users(server_t *s, int clifd, char *team)
 void subscribed(server_t *s, char **arr)
 {
     if (arr[1] == NULL);
-    else if (team_exists(arr[1]) == 0) {
+    else if (team_exists(arr[1]) == 0)
         list_users(s, s->l_cli->fd, arr[1]);
-    } else
+    else
         dprintf(s->l_cli->fd, "CREATE UNKNOWN\n");
 }

@@ -37,7 +37,7 @@ void info_team(server_t *s)
     size_t size = 0;
     FILE *fd = fopen("./server/logs/teams_uuid.log", "r+");
 
-    while(getline(&line, &size, fd) != -1) {
+    while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->teams) == 0)
             dprintf(s->l_cli->fd, "INFO TEAM \"%s\" \"%s\" \"%s\"\n", arr[1],
@@ -57,7 +57,7 @@ void info_chan(server_t *s)
     chdir("./server/logs/teams/");
     chdir(s->l_cli->teams->teams);
     fd = fopen("list_chans", "r+");
-    while(getline(&line, &size, fd) != -1) {
+    while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->channel) == 0)
             dprintf(s->l_cli->fd, "INFO CHAN \"%s\" \"%s\" \"%s\"\n", arr[1],
@@ -79,7 +79,7 @@ void info_thread(server_t *s)
     chdir(s->l_cli->teams->teams);
     chdir(s->l_cli->teams->channel);
     fd = fopen("list_threads", "r+");
-    while(getline(&line, &size, fd) != -1) {
+    while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->thread) == 0)
             dprintf(s->l_cli->fd,

@@ -35,6 +35,7 @@ void user_info_two(server_t *s, char **arr, int exists, char *request)
         dprintf(fd_client, "USER \"%s\" \"%s\" %d\n", arr[0], arr[1], online);
     }
 }
+
 void user_info(server_t *s, char **array)
 {
     size_t size = 0;

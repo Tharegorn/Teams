@@ -19,8 +19,7 @@ char *message_convert(char **str, int start)
         size += strlen(str[i]);
     tmp = malloc(sizeof(char) * (size + words + 1));
     tmp[0] = '\0';
-    for (int i = start; str[i]; i++)
-    {
+    for (int i = start; str[i]; i++) {
         tmp = strcat(tmp, str[i]);
         tmp = strcat(tmp, " ");
     }

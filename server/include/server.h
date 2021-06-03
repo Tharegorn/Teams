@@ -116,5 +116,8 @@ void unsubscribe(server_t *s, char **arr);
 int already_sub(server_t *s, char *name);
 int get_status(server_t *s, char *uuid, int pos);
 void subscribed(server_t *s, char **arr);
+void print_channel(server_t *s, char **a, char *uuid, int state);
+void logout_all(server_t *s);
+void sig_handler(__attribute__((unused)) int signal);
 typedef void (*commands)(server_t *s, char **command);
 #endif /* !SERVER_H_ */

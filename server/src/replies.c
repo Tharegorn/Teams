@@ -7,6 +7,13 @@
 
 #include "server.h"
 
+void free_reply(char *line, FILE *fd)
+{
+    free(line);
+    fclose(fd);
+    chdir("../../../../");
+}
+
 void contact_on_reply(server_t *s, char *body, time_t t)
 {
     FILE *fd;
@@ -24,7 +31,7 @@ void contact_on_reply(server_t *s, char *body, time_t t)
     while (getline(&line, &size, fd) != -1) {
         array = str_warray(line, ' ');
         go_prev(s);
-        for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+        for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
             if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
                 dprintf(s->l_cli->fd, "CREATE PRINT REP \"%s\" \"%s\" \"%ld\" \"%s\"\n",
                 th, uu, t, body);
@@ -35,10 +42,9 @@ void contact_on_reply(server_t *s, char *body, time_t t)
         }
         go_prev(s);
     }
-    free(line);
-    fclose(fd);
-    chdir("../../../../");
+    free_reply(line, fd);
 }
+
 void add_reply(server_t *s, char *body)
 {
     FILE *fd;
@@ -65,8 +71,6 @@ void create_reply(server_t *s, char **arr)
         dprintf(s->l_cli->fd, "SUB UNAUTH\n");
         return;
     }
-    if (strlen(arr[1]) <= 512)
-        add_reply(s, arr[1]);
-    else
-        dprintf(s->l_cli->fd, "CREATE ERROR\n");
+    if (strlen(arr[1]) <= 512) add_reply(s, arr[1]);
+    else dprintf(s->l_cli->fd, "CREATE ERROR\n");
 }

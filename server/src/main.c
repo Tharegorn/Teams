@@ -24,7 +24,6 @@ void init_server(server_t *s)
     socklen_t ads = sizeof(adr);
 
     set_clients(s);
-    signal(SIGINT, sig_handler);
     while (run == 1) {
         get_maxfd(s, &tmp, &read_fd, &write_fd);
         if (select(tmp + 1, &read_fd, &write_fd, NULL, 0x0) < 0)
@@ -37,15 +36,7 @@ void init_server(server_t *s)
         }
         handle_input(s, &read_fd, &write_fd);
     }
-    go_prev(s);
-    for (; s->l_cli->next != NULL;\
-     s->l_cli = s->l_cli->next) {
-        if (s->l_cli->fd != 0) {
-            if (s->l_cli->log_status == YES)
-                server_event_user_logged_out(s->l_cli->u_uuid);
-            dprintf(s->l_cli->fd, "LOGOUT REAL\n");
-        }
-    }
+    logout_all(s);
 }
 
 int create_server(server_t *s, int port)

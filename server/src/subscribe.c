@@ -64,6 +64,16 @@ void fill_team_side(server_t *s, char *name)
     fclose(fd);
 }
 
+void poubelle(server_t *s, char **arr, FILE *fd)
+{
+    chdir("../../../");
+    fill_team_side(s, arr[1]);
+    server_event_user_subscribed(arr[1], s->l_cli->u_uuid);
+    fprintf(fd, "\"%s\"\n", arr[1]);
+    dprintf(s->l_cli->fd, "SUB \"%s\"\n", arr[1]);
+    fclose(fd);
+}
+
 void sub(server_t *s, char **arr)
 {
     FILE *fd;
@@ -82,10 +92,5 @@ void sub(server_t *s, char **arr)
         fd = fopen(s->l_cli->u_uuid, "a");
     } else
         fd = fopen(s->l_cli->u_uuid, "w+");
-    chdir("../../../");
-    fill_team_side(s, arr[1]);
-    server_event_user_subscribed(arr[1], s->l_cli->u_uuid);
-    fprintf(fd, "\"%s\"\n", arr[1]);
-    dprintf(s->l_cli->fd, "SUB \"%s\"\n", arr[1]);
-    fclose(fd);
+    poubelle(s, arr, fd);
 }

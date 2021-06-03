@@ -52,39 +52,36 @@ void add_channel(char *chan_uuid, char **arr, char *team_uuid)
     fclose(fd);
 }
 
-void free_chan(char *line, FILE *fd)
+void free_chan(char *line, FILE *fd, server_t *s)
 {
+    go_prev(s);
     chdir("../../../../");
     free(line);
     fclose(fd);
 }
 
-void contact_all_chan(server_t *s, char **arr, char *uuid)
+void contact_all_chan(server_t *s, char **a, char *uuid)
 {
-    FILE *fd;
+    FILE *fd = fopen("subscribe", "r+");
     char *line = NULL;
     size_t size = 0;
     char **array = NULL;
     int pos = s->l_cli->position;
 
-    chdir("./server/logs/teams/");
-    chdir(s->l_cli->teams->teams);
-    fd = fopen("subscribe", "r+");
     while (getline(&line, &size, fd) != -1) {
         array = str_warray(line, ' ');
         go_prev(s);
-        for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
-            if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
-                dprintf(s->l_cli->fd, "CREATE PRINT CHAN \"%s\" \"%s\" \"%s\"\n",
-                uuid, arr[1], arr[2]);
-            } else if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0) {
-                dprintf(s->l_cli->fd, "CREATE EVENT CHAN \"%s\" \"%s\" \"%s\"\n",
-                uuid, arr[1], arr[2]);
-            }
+        for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+            if (s->l_cli->log_status == YES &&
+            strcmp(array[1], s->l_cli->u_uuid) == 0 &&
+            s->l_cli->position == pos)
+                print_channel(s, a, uuid, 0);
+            else if (s->l_cli->log_status == YES &&
+            strcmp(array[1], s->l_cli->u_uuid) == 0)
+                print_channel(s, a, uuid, 1);
         }
     }
-    go_prev(s);
-    free_chan(line, fd);
+    free_chan(line, fd, s);
 }
 
 void create_channel(server_t *s, char **arr)
@@ -97,8 +94,10 @@ void create_channel(server_t *s, char **arr)
         return;
     }
     if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&\
-     channel_exists(s->l_cli->teams->teams, arr[1]) == 1) {
+    channel_exists(s->l_cli->teams->teams, arr[1]) == 1) {
         add_channel(uuid, arr, s->l_cli->teams->teams);
+        chdir("./server/logs/teams/");
+        chdir(s->l_cli->teams->teams);
         contact_all_chan(s, arr, uuid);
         for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
             if (s->l_cli->position == pos)

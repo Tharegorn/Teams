@@ -16,7 +16,7 @@ void rewrite_user(server_t *s)
 
     remove(s->l_cli->u_uuid);
     fd = fopen(s->l_cli->u_uuid, "w+");
-    while(getline(&line, &size, tmp) != -1)
+    while (getline(&line, &size, tmp) != -1)
         fprintf(fd, "%s", line);
     fclose(fd);
     fclose(tmp);
@@ -32,7 +32,7 @@ void remove_user(server_t *s, char **arr)
     size_t size = 0;
     char **array = NULL;
 
-    while(getline(&line, &size, fd) != -1) {
+    while (getline(&line, &size, fd) != -1) {
         array = str_warray(line, ' ');
         if (strcmp(array[0], arr[1]) != 0)
             fprintf(tmp, "%s", line);
@@ -52,7 +52,7 @@ void rewrite_team(void)
 
     remove("subscribe");
     fd = fopen("subscribe", "w+");
-    while(getline(&line, &size, tmp) != -1)
+    while (getline(&line, &size, tmp) != -1)
         fprintf(fd, "%s", line);
     fclose(fd);
     fclose(tmp);
@@ -68,7 +68,7 @@ void remove_team(char *user)
     size_t size = 0;
     char **array = NULL;
 
-    while(getline(&line, &size, fd) != -1) {
+    while (getline(&line, &size, fd) != -1) {
         array = str_warray(line, ' ');
         if (strcmp(array[1], user) != 0)
             fprintf(tmp, "%s", line);

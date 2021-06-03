@@ -78,10 +78,10 @@ char **str_warray(char const *str, char f)
     if (strlen(str) == 0)
         return NULL;
     pos = 0;
-    array = malloc(sizeof (char *) * (words + 1));
+    array = malloc(sizeof(char *) * (words + 1));
     for (int i = 0, j = 0; i < words; i++, j++) {
         len = len_word(str, f);
-        array[i] =  get_chrs(str, position, position + len);
+        array[i] = get_chrs(str, position, position + len);
         position += len + 1;
     }
     if (array[words - 1][strlen(array[words - 1]) - 1] == '\n')

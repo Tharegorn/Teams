@@ -17,7 +17,7 @@ char *message_convert(char **str, int start)
         return str[2];
     for (int i = start; str[i]; i++, words++)
         size += strlen(str[i]);
-    tmp = malloc(sizeof (char) * (size + words + 1));
+    tmp = malloc(sizeof(char) * (size + words + 1));
     tmp[0] = '\0';
     for (int i = start; str[i]; i++) {
         tmp = strcat(tmp, str[i]);
@@ -36,7 +36,7 @@ void save_message(char **arr, char *sender_uuid)
     strcpy(file, "./server/logs/PM/");
     strcat(file, arr[1]);
     strcat(file, ".log");
-    if(access(file, F_OK ) != 0)
+    if (access(file, F_OK) != 0)
         fd = fopen(file, "w");
     else
         fd = fopen(file, "a");
@@ -51,12 +51,11 @@ void send_message(server_t *s, char **arr)
     char *name = strdup(s->l_cli->u_uuid);
 
     go_prev(s);
-    for (; s->l_cli->next != NULL;\
-     s->l_cli = s->l_cli->next) {
+    for (; s->l_cli->next != NULL;
+    s->l_cli = s->l_cli->next) {
         if (strcmp(s->l_cli->u_uuid, arr[1]) == 0) {
             save_message(arr, name);
-            dprintf(s->l_cli->fd, "PM \"%s\" \"%s\"\n",\
-             name, arr[2]);
+            dprintf(s->l_cli->fd, "PM \"%s\" \"%s\"\n", name, arr[2]);
             break;
         }
     }

@@ -55,13 +55,13 @@ time_t fill_file(server_t *s, char *title, char *body, char *uuid)
     return now;
 }
 
-void add_thread(server_t *s, char *title, char *body, char *uuid)
+void add_thread(server_t *s, char *ti, char *b, char *u)
 {
     FILE *fd;
     char *line = NULL;
     char **array = NULL;
     size_t size = 0;
-    time_t t = fill_file(s, title, body, uuid);
+    time_t t = fill_file(s, ti, b, u);
     int pos = s->l_cli->position;
 
     chdir("./server/logs/teams/");
@@ -74,11 +74,11 @@ void add_thread(server_t *s, char *title, char *body, char *uuid)
             if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
                 dprintf(s->l_cli->fd,
                 "CREATE PRINT THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
-                uuid, s->l_cli->u_uuid, t, title, body);
+                u, s->l_cli->u_uuid, t, ti, b);
             } else if (s->l_cli->log_status == YES && strcmp(array[1], s->l_cli->u_uuid) == 0) {
                 dprintf(s->l_cli->fd,
                 "CREATE EVENT THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
-                uuid, s->l_cli->u_uuid, t, title, body);
+                u, s->l_cli->u_uuid, t, ti, b);
             }
         }
     }
@@ -87,7 +87,6 @@ void add_thread(server_t *s, char *title, char *body, char *uuid)
     fclose(fd);
     chdir("../../../../");
 }
-
 
 void create_thread(server_t *s, char **arr)
 {
