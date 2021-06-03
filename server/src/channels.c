@@ -65,6 +65,7 @@ void contact_all_chan(server_t *s, char **arr, char *uuid)
     char *line = NULL;
     size_t size = 0;
     char **array = NULL;
+    int pos = s->l_cli->position;
 
     chdir("./server/logs/teams/");
     chdir(s->l_cli->teams->teams);
@@ -73,7 +74,10 @@ void contact_all_chan(server_t *s, char **arr, char *uuid)
         array = str_warray(line, ' ');
         go_prev(s);
         for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
-            if (strcmp(array[1], s->l_cli->u_uuid) == 0) {
+            if (strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
+                dprintf(s->l_cli->fd, "LIST CHAN \"%s\" \"%s\" \"%s\"\n",
+                uuid, arr[1], arr[2]);
+            } else if (strcmp(array[1], s->l_cli->u_uuid) == 0) {
                 dprintf(s->l_cli->fd, "CREATE CHAN \"%s\" \"%s\" \"%s\"\n",
                 uuid, arr[1], arr[2]);
             }
