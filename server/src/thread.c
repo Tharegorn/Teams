@@ -57,11 +57,35 @@ time_t fill_file(server_t *s, char *title, char *body, char *uuid)
 
 void add_thread(server_t *s, char *title, char *body, char *uuid)
 {
+    FILE *fd;
+    char *line = NULL;
+    char **array = NULL;
+    size_t size = 0;
     time_t t = fill_file(s, title, body, uuid);
+    int pos = s->l_cli->position;
 
-    dprintf(s->l_cli->fd,
-    "CREATE THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
-    uuid, s->l_cli->u_uuid, t, title, body);
+    chdir("./server/logs/teams/");
+    chdir(s->l_cli->teams->teams);
+    fd = fopen("subscribe", "r+");
+    while (getline(&line, &size, fd) != -1) {
+        array = str_warray(line, ' ');
+        go_prev(s);
+        for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+            if (strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
+                dprintf(s->l_cli->fd,
+                "LIST TH \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
+                uuid, s->l_cli->u_uuid, t, title, body);
+            } else if (strcmp(array[1], s->l_cli->u_uuid) == 0) {
+                dprintf(s->l_cli->fd,
+                "CREATE THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
+                uuid, s->l_cli->u_uuid, t, title, body);
+            }
+        }
+        go_prev(s);
+    }
+    free(line);
+    fclose(fd);
+    chdir("../../../../");
 }
 
 
