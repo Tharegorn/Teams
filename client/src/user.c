@@ -17,10 +17,8 @@ void rec_user(__attribute__((unused)) client_t *cli, char **arr)
 
 void send_user(client_t *cli, char **arr)
 {
-    if (cli->log_status == NO)
+    if (cli->log_status == NO || arr[1] == NULL)
         client_error_unauthorized();
-    else if (arr[1] == NULL)
-        printf("INVALID UUID\n");
     else
-        dprintf(cli->sockid, "USER %s\n", arr[1]);
+        dprintf(cli->sockid, "USER \"%s\"\n", arr[1]);
 }

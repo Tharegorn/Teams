@@ -14,13 +14,14 @@ void info_free(FILE *fd, char *line, char **arr)
     for (int i = 0; arr[i]; i++, free(arr[i]));
 }
 
-void user_info_two(server_t *s, char **arr, int exists, int stk)
+void user_info_two(server_t *s, char **arr, int exists, char *request)
 {
     int online = 0;
     int fd_client = s->l_cli->fd;
+    int stk = s->l_cli->position;
 
     if (exists == 0)
-        dprintf(fd_client, "USER NULL %s\n", arr[1]);
+        dprintf(fd_client, "USER NULL \"%s\"\n", request);
     else {
         go_prev(s);
         for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
@@ -31,7 +32,7 @@ void user_info_two(server_t *s, char **arr, int exists, int stk)
         for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
             if (s->l_cli->position == stk)
                 break;
-        dprintf(fd_client, "USER %s %s %d\n", arr[0], arr[1], online);
+        dprintf(fd_client, "USER \"%s\" \"%s\" %d\n", arr[0], arr[1], online);
     }
 }
 void user_info(server_t *s, char **array)
@@ -41,7 +42,6 @@ void user_info(server_t *s, char **array)
     char **arr = NULL;
     int exists = 0;
     FILE *fd;
-    int stk = s->l_cli->position;
 
     if (array[1] == NULL)
         return;
@@ -53,6 +53,6 @@ void user_info(server_t *s, char **array)
             break;
         }
     }
-    user_info_two(s, arr, exists, stk);
+    user_info_two(s, arr, exists, array[1]);
     info_free(fd, line, arr);
 }

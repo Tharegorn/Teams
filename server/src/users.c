@@ -22,11 +22,11 @@ int is_online(server_t *s, char *uuid)
     s->l_cli = s->l_cli->next) {
         if (s->l_cli->u_uuid != NULL && strcmp(s->l_cli->u_uuid, uuid) == 0) {
             go_prev(s);
-            return 0;
+            return 1;
         }
     }
     go_prev(s);
-    return 1;
+    return 0;
 }
 
 void users(server_t *s, __attribute__((unused))char **array)
@@ -43,7 +43,7 @@ void users(server_t *s, __attribute__((unused))char **array)
         go_prev(s);
         on = is_online(s, arr[1]);
         go_pos(pos, s);
-        dprintf(s->l_cli->fd, "USERS %s %s %d\n", arr[1], arr[0], on);
+        dprintf(s->l_cli->fd, "USERS \"%s\" \"%s\" %d\n", arr[1], arr[0], on);
         usleep(0.1);
     }
     free(line);

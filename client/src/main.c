@@ -53,8 +53,7 @@ void send_to_server(client_t *cli, char *line)
         return;
     }
     arr = str_warray(line, ' ');
-    if (arr[0] == NULL)
-        return;
+    if (arr[0] == NULL) return;
     for (int i = 0; args[i]; i++) {
         if (strcmp(args[i], arr[0]) == 0) {
             to_server[i](cli, arr);
@@ -62,8 +61,7 @@ void send_to_server(client_t *cli, char *line)
             break;
         }
     }
-    if (j == 0)
-        client_error_unauthorized();
+    if (j == 0) client_error_unauthorized();
 }
 
 void loop(client_t *cli)
@@ -102,10 +100,8 @@ int main(int ac, char **av)
     sockaddr.sin_addr.s_addr = inet_addr(av[1]);
     sockaddr.sin_port = htons(atoi(av[2]));
     if (connect(cli->sockid, (struct sockaddr *)&sockaddr,
-    sizeof(sockaddr)) < 0) {
-        perror("Error on connect\n");
+    sizeof(sockaddr)) < 0)
         exit(84);
-    }
     run = 1;
     loop(cli);
     return 0;
