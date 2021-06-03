@@ -73,11 +73,11 @@ void add_thread(server_t *s, char *title, char *body, char *uuid)
         for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
             if (strcmp(array[1], s->l_cli->u_uuid) == 0 && s->l_cli->position == pos) {
                 dprintf(s->l_cli->fd,
-                "LIST TH \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
+                "CREATE PRINT THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
                 uuid, s->l_cli->u_uuid, t, title, body);
             } else if (strcmp(array[1], s->l_cli->u_uuid) == 0) {
                 dprintf(s->l_cli->fd,
-                "CREATE THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
+                "CREATE EVENT THREAD \"%s\" \"%s\" \"%ld\" \"%s\" \"%s\"\n",
                 uuid, s->l_cli->u_uuid, t, title, body);
             }
         }
