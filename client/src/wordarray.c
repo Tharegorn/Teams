@@ -41,7 +41,7 @@ int len_word(char const *str, char f)
     int len = 0;
 
     for (; str[pos] && (str[pos] != f ||
-    (str[pos] == f && quote == true)); pos++, len++) {
+                        (str[pos] == f && quote == true)); pos++, len++) {
         if (str[pos] == 34) {
             if (quote == true)
                 quote = false;

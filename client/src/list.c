@@ -14,11 +14,11 @@ void rec_list(__attribute__((unused))client_t *cli, char **arr)
     if (strcmp(arr[1], "CHAN") == 0)
         client_team_print_channels(arr[2], arr[3], arr[4]);
     if (strcmp(arr[1], "TH") == 0)
-        client_channel_print_threads(arr[2], arr[3], (time_t)atoi(arr[4]),
-        arr[5], arr[6]);
+        client_channel_print_threads(arr[2], arr[3], (time_t) atoi(arr[4]),
+                                     arr[5], arr[6]);
     if (strcmp(arr[1], "REP") == 0)
-        client_thread_print_replies(arr[2], arr[3], (time_t)atoi(arr[4]),
-        arr[5]);
+        client_thread_print_replies(arr[2], arr[3], (time_t) atoi(arr[4]),
+                                    arr[5]);
     if (strcmp(arr[1], "ERROR") == 0)
         client_error_already_exist();
 }

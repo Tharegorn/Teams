@@ -10,7 +10,7 @@
 void go_pos(int pos, server_t *s)
 {
     for (; s->l_cli->next != NULL;
-    s->l_cli = s->l_cli->next) {
+           s->l_cli = s->l_cli->next) {
         if (s->l_cli->position == pos)
             break;
     }
@@ -18,8 +18,7 @@ void go_pos(int pos, server_t *s)
 
 int is_online(server_t *s, char *uuid)
 {
-    for (; s->l_cli->next != NULL;
-    s->l_cli = s->l_cli->next) {
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
         if (s->l_cli->u_uuid != NULL && strcmp(s->l_cli->u_uuid, uuid) == 0) {
             go_prev(s);
             return 1;

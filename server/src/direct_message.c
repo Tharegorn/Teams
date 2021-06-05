@@ -52,7 +52,7 @@ void send_message(server_t *s, char **arr)
 
     go_prev(s);
     for (; s->l_cli->next != NULL;
-    s->l_cli = s->l_cli->next) {
+           s->l_cli = s->l_cli->next) {
         if (strcmp(s->l_cli->u_uuid, arr[1]) == 0) {
             save_message(arr, name);
             dprintf(s->l_cli->fd, "PM \"%s\" \"%s\"\n", name, arr[2]);

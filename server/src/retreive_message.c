@@ -36,7 +36,7 @@ void retreive(server_t *s, char *uuid)
     char *line = NULL;
     char **a = NULL;
     size_t size = 0;
-    int any =  s->l_cli->fd;
+    int any = s->l_cli->fd;
 
     if (get_path(s, file) == 1)
         return;
@@ -45,7 +45,7 @@ void retreive(server_t *s, char *uuid)
         a = str_warray(line, ' ');
         if (strcmp(a[0], uuid) == 0) {
             dprintf(s->l_cli->fd, "MSG \"%s\" \"%s\" \"%s\"\n",
-            a[0], a[1], a[2]);
+                    a[0], a[1], a[2]);
             usleep(0.1);
             any = 1;
         }

@@ -12,7 +12,7 @@ void display_all(server_t *s, char *uuid, char *name)
     int position = s->l_cli->position;
 
     dprintf(s->l_cli->fd, "LOGIN CREATE \"%s\" \"%s\"\n",
-    s->l_cli->u_uuid, s->l_cli->name);
+            s->l_cli->u_uuid, s->l_cli->name);
     go_prev(s);
     for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
         if (s->l_cli->log_status == YES && s->l_cli->position != position)
@@ -36,9 +36,9 @@ void add_user_two(server_t *s, char **arr, char **array, int res)
         s->l_cli->name = strdup(arr[1]);
         s->l_cli->u_uuid = strdup(gen_uuid());
         fprintf(fd, "\"%s\" \"%s\"\n", s->l_cli->name,
-        s->l_cli->u_uuid);
+                s->l_cli->u_uuid);
         server_event_user_created(s->l_cli->u_uuid,
-        s->l_cli->name);
+                                  s->l_cli->name);
     }
     server_event_user_logged_in(s->l_cli->u_uuid);
     display_all(s, s->l_cli->u_uuid, s->l_cli->name);

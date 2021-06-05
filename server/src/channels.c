@@ -73,11 +73,11 @@ void contact_all_chan(server_t *s, char **a, char *uuid)
         go_prev(s);
         for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
             if (s->l_cli->log_status == YES &&
-            strcmp(array[1], s->l_cli->u_uuid) == 0 &&
-            s->l_cli->position == pos)
+                strcmp(array[1], s->l_cli->u_uuid) == 0 &&
+                s->l_cli->position == pos)
                 print_channel(s, a, uuid, 0);
             else if (s->l_cli->log_status == YES &&
-            strcmp(array[1], s->l_cli->u_uuid) == 0)
+                     strcmp(array[1], s->l_cli->u_uuid) == 0)
                 print_channel(s, a, uuid, 1);
         }
     }
@@ -93,7 +93,7 @@ void create_channel(server_t *s, char **arr)
         dprintf(s->l_cli->fd, "SUB UNAUTH\n");
         return;
     }
-    if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&\
+    if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 && \
     channel_exists(s->l_cli->teams->teams, arr[1]) == 1) {
         add_channel(uuid, arr, s->l_cli->teams->teams);
         chdir("./server/logs/teams/");

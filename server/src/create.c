@@ -62,15 +62,16 @@ int check_params(server_t *s)
             dprintf(i, "CREATE TEAM UNKNOW \"%s\"", s->l_cli->teams->teams);
             return 1;
         }
-    } if (s->l_cli->teams->channel != NULL) {
-        if (chan_exist(s->l_cli->teams->teams,
-        s->l_cli->teams->channel) == 1) {
+    }
+    if (s->l_cli->teams->channel != NULL) {
+        if (chan_exist(s->l_cli->teams->teams, s->l_cli->teams->channel) == 1) {
             dprintf(i, "CREATE CHAN UNKNOW \"%s\"", s->l_cli->teams->channel);
             return 1;
         }
-    } if (s->l_cli->teams->thread != NULL) {
-        if (thread_exist(s->l_cli->teams->teams,
-        s->l_cli->teams->channel, s->l_cli->teams->thread) == 1) {
+    }
+    if (s->l_cli->teams->thread != NULL) {
+        if (thread_exist(s->l_cli->teams->teams, s->l_cli->teams->channel,
+                         s->l_cli->teams->thread) == 1) {
             dprintf(i, "CREATE THREAD UNKNOW \"%s\"", s->l_cli->teams->thread);
             return 1;
         }

@@ -83,7 +83,7 @@ void sub(server_t *s, char **arr)
         return;
     }
     chdir("./server/logs/USERS/");
-    if (access(s->l_cli->u_uuid, F_OK ) == 0 ) {
+    if (access(s->l_cli->u_uuid, F_OK) == 0) {
         if (already_sub(s, arr[1]) == 1) {
             chdir("../../../");
             dprintf(s->l_cli->fd, "CREATE ERROR\n");

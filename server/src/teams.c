@@ -51,17 +51,17 @@ void contact_all(server_t *s, char **arr, char *uuid)
     int pos = s->l_cli->position;
 
     go_prev(s);
-    for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
         if (s->l_cli->log_status == YES && s->l_cli->position == pos) {
             dprintf(s->l_cli->fd, "CREATE PRINT TEAM \"%s\" \"%s\" \"%s\"\n",
-            uuid, arr[1], arr[2]);
+                    uuid, arr[1], arr[2]);
         } else if (s->l_cli->log_status == YES) {
             dprintf(s->l_cli->fd, "CREATE EVENT TEAM \"%s\" \"%s\" \"%s\"\n",
-            uuid, arr[1], arr[2]);
+                    uuid, arr[1], arr[2]);
         }
     }
     go_prev(s);
-    for(; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
+    for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
         if (s->l_cli->position == pos)
             break;
 }
@@ -82,7 +82,7 @@ void create_team(server_t *s, char **arr)
     char *uuid = gen_uuid();
 
     if (strlen(arr[1]) <= 32 && strlen(arr[2]) <= 255 &&
-    teams_exists(arr[1]) == 1) {
+        teams_exists(arr[1]) == 1) {
         add_team(uuid, arr[1], arr[2], s->l_cli->u_uuid);
         create_sub(uuid);
         contact_all(s, arr, uuid);

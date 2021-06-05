@@ -26,7 +26,7 @@ void user_info_two(server_t *s, char **arr, int exists, char *request)
         go_prev(s);
         for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)
             if (s->l_cli->u_uuid != NULL &&
-            strcmp(s->l_cli->u_uuid, arr[1]) == 0)
+                strcmp(s->l_cli->u_uuid, arr[1]) == 0)
                 online = 1;
         go_prev(s);
         for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next)

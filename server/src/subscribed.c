@@ -20,7 +20,7 @@ void list_users(server_t *s, int clifd, char *team)
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         dprintf(clifd, "USERS %s %s %d\n", arr[1], arr[0],
-        get_status(s, arr[1], s->l_cli->position));
+                get_status(s, arr[1], s->l_cli->position));
         usleep(0.1);
     }
     fclose(fd);

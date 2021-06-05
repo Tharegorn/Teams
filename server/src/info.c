@@ -41,7 +41,7 @@ void info_team(server_t *s)
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->teams) == 0)
             dprintf(s->l_cli->fd, "INFO TEAM \"%s\" \"%s\" \"%s\"\n", arr[1],
-            arr[0], arr[2]);
+                    arr[0], arr[2]);
     }
     free(line);
     fclose(fd);
@@ -61,7 +61,7 @@ void info_chan(server_t *s)
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->channel) == 0)
             dprintf(s->l_cli->fd, "INFO CHAN \"%s\" \"%s\" \"%s\"\n", arr[1],
-            arr[0], arr[2]);
+                    arr[0], arr[2]);
     }
     chdir("../../../../");
     free(line);
@@ -83,8 +83,8 @@ void info_thread(server_t *s)
         arr = str_warray(line, ' ');
         if (strcmp(arr[1], s->l_cli->teams->thread) == 0)
             dprintf(s->l_cli->fd,
-            "INFO TH \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"\n",
-            arr[1], arr[4], arr[3], arr[0], arr[2]);
+                    "INFO TH \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"\n",
+                    arr[1], arr[4], arr[3], arr[0], arr[2]);
     }
     chdir("../../../../../");
     free(line);
