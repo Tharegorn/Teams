@@ -54,10 +54,10 @@ void contact_all(server_t *s, char **arr, char *uuid)
     for (; s->l_cli->next != NULL; s->l_cli = s->l_cli->next) {
         if (s->l_cli->log_status == YES && s->l_cli->position == pos) {
             dprintf(s->l_cli->fd, "CREATE PRINT TEAM \"%s\" \"%s\" \"%s\"\n",
-                    uuid, arr[1], arr[2]);
+            uuid, arr[1], arr[2]);
         } else if (s->l_cli->log_status == YES) {
             dprintf(s->l_cli->fd, "CREATE EVENT TEAM \"%s\" \"%s\" \"%s\"\n",
-                    uuid, arr[1], arr[2]);
+            uuid, arr[1], arr[2]);
         }
     }
     go_prev(s);

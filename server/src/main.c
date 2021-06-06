@@ -30,7 +30,7 @@ void init_server(server_t *s)
             break;
         if (FD_ISSET(s->sockid, &read_fd)) {
             if ((nw_socket = accept(s->sockid,
-                                    (struct sockaddr *) &adr, &ads)) < 0)
+            (struct sockaddr *) &adr, &ads)) < 0)
                 break;
             set_socketclient(s, &nw_socket);
         }
@@ -55,7 +55,8 @@ int create_server(server_t *s, int port)
 
 int serv_handling(server_t *serv)
 {
-    if (bind(serv->sockid, (struct sockaddr *) &serv->serv, serv->size) == -1) {
+    if (bind(serv->sockid, (struct sockaddr *) &serv->serv,
+    serv->size) == -1) {
         shutdown(serv->sockid, SHUT_RDWR);
         close(serv->sockid);
         return 84;

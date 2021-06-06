@@ -17,7 +17,7 @@ void list_teams(server_t *s)
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         dprintf(s->l_cli->fd, "LIST TEAM \"%s\" \"%s\" \"%s\"\n",
-                arr[1], arr[0], arr[2]);
+        arr[1], arr[0], arr[2]);
         usleep(0.1);
     }
     free(line);
@@ -37,7 +37,7 @@ void list_chan(server_t *s)
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         dprintf(s->l_cli->fd, "LIST CHAN \"%s\" \"%s\" \"%s\"\n",
-                arr[1], arr[0], arr[2]);
+        arr[1], arr[0], arr[2]);
         usleep(0.1);
     }
     chdir("../../../../");
@@ -59,7 +59,7 @@ void list_th(server_t *s)
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         dprintf(s->l_cli->fd, "LIST TH \"%s\" \"%s\" \"%s\" \"%s\" \"%s\"\n",
-                arr[1], arr[4], arr[3], arr[0], arr[2]);
+        arr[1], arr[4], arr[3], arr[0], arr[2]);
         usleep(0.1);
     }
     chdir("../../../../../");
@@ -82,7 +82,7 @@ void list_rep(server_t *s)
     while (getline(&line, &size, fd) != -1) {
         arr = str_warray(line, ' ');
         dprintf(s->l_cli->fd, "LIST REP \"%s\" \"%s\" \"%s\" \"%s\"\n",
-                arr[0], arr[1], arr[2], arr[3]);
+        arr[0], arr[1], arr[2], arr[3]);
         usleep(0.1);
     }
     chdir("../../../../../../");

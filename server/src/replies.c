@@ -77,5 +77,6 @@ void create_reply(server_t *s, char **arr)
         return;
     }
     if (strlen(arr[1]) <= 512) add_reply(s, arr[1]);
-    else dprintf(s->l_cli->fd, "CREATE ERROR\n");
+    else
+        dprintf(s->l_cli->fd, "CREATE ERROR\n");
 }

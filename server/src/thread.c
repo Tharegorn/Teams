@@ -43,14 +43,14 @@ time_t fill_file(server_t *s, char *title, char *body, char *uuid)
     chdir(s->l_cli->teams->channel);
     fd = fopen("list_threads", "a");
     fprintf(fd, "\"%s\" \"%s\" \"%s\" \"%ld\" \"%s\"\n",
-            title, uuid, body, now, s->l_cli->u_uuid);
+    title, uuid, body, now, s->l_cli->u_uuid);
     mkdir(uuid, 0700);
     chdir(uuid);
     file = fopen("replies", "w+");
     fclose(file);
     fclose(fd);
     server_event_thread_created(s->l_cli->teams->channel, uuid,
-                                s->l_cli->u_uuid, title, body);
+    s->l_cli->u_uuid, title, body);
     chdir("../../../../../../");
     return now;
 }
