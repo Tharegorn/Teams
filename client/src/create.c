@@ -24,7 +24,7 @@ void print_create(char **arr)
                                     arr[6], arr[7]);
     if (strcmp(arr[2], "REP") == 0)
         client_print_reply_created(arr[3], arr[4],
-                                   (time_t) atoi(arr[5]), arr[6]);
+        (time_t) atoi(arr[5]), arr[6]);
     if (strcmp(arr[2], "ERROR") == 0)
         client_error_already_exist();
 }

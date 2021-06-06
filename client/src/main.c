@@ -19,9 +19,9 @@ void receive(client_t *cli)
     char **arr = NULL;
     char buffer[5024];
     int len = 0;
-    commands rec[] = {&rec_login, &rec_logout, &rec_user,
-                      &rec_users, &rec_send, &rec_msg, &rec_create, &rec_use,
-                      &rec_list, &rec_info, &rec_sub, &rec_unsub};
+    commands rec[] = {&rec_login, &rec_logout, &rec_user, &rec_users, &rec_send,
+                      &rec_msg, &rec_create, &rec_use, &rec_list, &rec_info,
+                      &rec_sub, &rec_unsub};
     char *args[] = {"LOGIN", "LOGOUT", "USER", "USERS", "PM", "MSG", "CREATE",
                     "USE", "LIST", "INFO", "SUB", "UNSUB", NULL};
 
@@ -41,12 +41,13 @@ void send_to_server(client_t *cli, char *line)
 {
     char **arr = NULL;
     int j = 0;
-    commands to_server[] = {&send_login, &send_logout, &send_user,
-                            &send_users, &send_send, &send_msg, &send_create, &send_use,
-                            &send_list, &send_info, &send_sub, &send_unsub, &send_subscribed};
-    char *args[] = { "/login", "/logout",
-                     "/user", "/users", "/send", "/messages", "/create", "/use", "/list",
-                     "/info", "/subscribe", "/unsubscribe", "/subscribed", NULL};
+    commands to_server[] = {&send_login, &send_logout, &send_user, &send_users,
+                            &send_send, &send_msg, &send_create, &send_use,
+                            &send_list, &send_info, &send_sub, &send_unsub,
+                            &send_subscribed};
+    char *args[] = {"/login", "/logout", "/user", "/users", "/send",
+                    "/messages", "/create", "/use", "/list", "/info",
+                    "/subscribe", "/unsubscribe", "/subscribed", NULL};
 
     if (strlen(line) == 0) {
         client_error_unauthorized();

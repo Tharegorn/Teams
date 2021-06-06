@@ -21,7 +21,7 @@ OBJ-CRIT	=	$(SRC-CRIT:$(EXTENSION)=.o)
 
 CPPFLAGS	+=	-Wall -Wextra
 LDFLAGS		+=	-g3
-LIDS		+= 
+#LIDS		+=
 CFLAGS		+=	-I../libs/myteams -Iinclude -fno-builtin -g3
 CXXFLAGS	+=	-IInclude -fno-builtin
 CRITFLAGS	=	-lcriterion --coverage
